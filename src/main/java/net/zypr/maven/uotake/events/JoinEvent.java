@@ -34,5 +34,6 @@ public class JoinEvent implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Uotake.playerDataManager.savePlayerData(player);
+        Uotake.playerDataManager.removePlayerData(player.getUniqueId());
     }
 }

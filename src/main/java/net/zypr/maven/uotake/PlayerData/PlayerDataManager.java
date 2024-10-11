@@ -114,6 +114,10 @@ public class PlayerDataManager {
         }
     }
 
+    public void removePlayerData(UUID uuid) {
+        playerDataMap.remove(uuid);
+    }
+
     public PlayerData getPlayerData(UUID uniqueId) {
         return playerDataMap.get(uniqueId);
     }

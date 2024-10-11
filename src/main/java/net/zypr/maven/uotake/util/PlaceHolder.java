@@ -2,7 +2,7 @@ package net.zypr.maven.uotake.util;
 
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
-import net.zypr.maven.uotake.classes.Weapon;
+import net.zypr.maven.uotake.WeaponData.Weapon;
 import org.bukkit.entity.Player;
 
 import java.util.Map;

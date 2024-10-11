@@ -12,7 +12,9 @@ import java.util.Objects;
 public class Menu {
     public static void open(Player p, String id) {
         p.closeInventory();
-        if (Uotake.menu.contains(id)) {
+        if (Objects.equals(id, "shop.ar")) {
+ //
+        } else if (Uotake.menu.contains(id)) { //menu.ymlから読み込み
             Inventory inv = Bukkit.createInventory(new InvHolder(), (Integer) Uotake.menu.get(id + ".size"),(String) Objects.requireNonNull(Uotake.menu.get(id + ".title")));
             InvLoader.load(inv,Uotake.menu,id + ".contents", p);
             p.openInventory(inv);
