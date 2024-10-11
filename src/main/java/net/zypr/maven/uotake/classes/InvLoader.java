@@ -12,6 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 public class InvLoader {
+    public static void load(org.bukkit.inventory.Inventory inventory,List<ItemStack> items) {
+        inventory.clear();
+        int loop = 0;
+        for (ItemStack item : items) {
+            inventory.setItem(loop,item);
+            loop++;
+        }
+    }
+
     public static void load(org.bukkit.inventory.Inventory inventory, FileConfiguration yaml, String path, Player p) {
         List<Map<?, ?>> itemList = yaml.getMapList(path);
         inventory.clear();

@@ -5,6 +5,7 @@ import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import org.bukkit.entity.Player;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,9 +42,9 @@ public class PlaceHolder {
             for (String key: keys) {
                 for (String index : indexes) {
                     if (key.equals("now")) {
-                        result = result.replace("{equip_now_" + index + "_name}", Weapon.getName(equipment.get(select).get(index)));
+                        result = result.replace("{equip_now_" + index + "_name}", Weapon.getName(equipment.get(select).get(index),index));
                     } else {
-                        result = result.replace("{equip_" + key + "_" + index + "_name}", Weapon.getName(equipment.get(key).get(index)));
+                        result = result.replace("{equip_" + key + "_" + index + "_name}", Weapon.getName(equipment.get(key).get(index),index));
                     }
                 }
             }
@@ -57,9 +58,9 @@ public class PlaceHolder {
             for (String key: keys) {
                 for (String index : indexes) {
                     if (key.equals("now")) {
-                        result = result.replace("{equip_now_" + index + "_item}",Weapon.getMaterial(equipment.get(select).get(index)).toString());
+                        result = result.replace("{equip_now_" + index + "_item}",Weapon.getMaterial(equipment.get(select).get(index),index).toString());
                     } else {
-                        result = result.replace("{equip_" + key + "_" + index + "_item}", Weapon.getMaterial(equipment.get(key).get(index)).toString());
+                        result = result.replace("{equip_" + key + "_" + index + "_item}", Weapon.getMaterial(equipment.get(key).get(index),index).toString());
                     }
                 }
             }
@@ -78,9 +79,9 @@ public class PlaceHolder {
             for (String key: keys) {
                 for (String index : indexes) {
                     if (key.equals("now")) {
-                        result = result.replace("{equip_now_" + index + "_cmd}",Weapon.getCmd(equipment.get(select).get(index)).toString());
+                        result = result.replace("{equip_now_" + index + "_cmd}",Weapon.getCmd(equipment.get(select).get(index),index).toString());
                     } else {
-                        result = result.replace("{equip_" + key + "_" + index + "_cmd}", Weapon.getCmd(equipment.get(key).get(index)).toString());
+                        result = result.replace("{equip_" + key + "_" + index + "_cmd}", Weapon.getCmd(equipment.get(key).get(index),index).toString());
                     }
                 }
             }

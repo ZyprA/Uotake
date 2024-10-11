@@ -1,7 +1,9 @@
 package net.zypr.maven.uotake.classes;
 
 import net.zypr.maven.uotake.Uotake;
+import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.PlaceHolder;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Iterator;
@@ -16,10 +18,38 @@ public class ItemAction {
             String[] args = param.split("@");
             switch (args[0]) {
                 case "OpenMenu":
+                    if (args.length != 2) {return;}
                     Menu.open(p, args[1]);
                     break;
+                case "buyweapon":
+                    if (args.length != 2) {return;}
+                    Integer buy = Weapon.buyWeapon(p, args[1]);
+                    switch (buy) {
+                        case 0:
+                            p.sendMessage("§a購入成功。");
+                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
+                            break;
+                        case 1:
+                            p.sendMessage("§c所持金が不足しているため購入できません。");
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            break;
+                        case 2:
+                            p.sendMessage("§cすでに所持しているため購入できません。");
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            break;
+                        case 3:
+                            p.sendMessage("§c武器のデータが存在しません。管理者に問い合わせてください。");
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            break;
+                        default:
+                            p.sendMessage("§c予期しないエラーが発生しました。管理者に問い合わせてください。");
+                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            break;
+                    }
                 case "Sound":
+                    if (args.length != 2) {return;}
                     String[] soundParams = args[1].split(",");
+                    if (soundParams.length != 3) {return;}
                     p.playSound(p.getLocation(), soundParams[0], Float.parseFloat(soundParams[1]),Float.parseFloat(soundParams[2]));
                     break;
                 case "status":
@@ -35,6 +65,8 @@ public class ItemAction {
                     if (Objects.equals(settingParams[0], "equip")) {
                         if (settingParams.length == 2) {
                             Uotake.playerDataManager.getPlayerData(p.getUniqueId()).setSelect(settingParams[1]);
+                        } else if (settingParams.length == 3) {
+                            if (settingParams[])
                         }
                     }
                 default:

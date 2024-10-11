@@ -4,6 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
 import net.zypr.maven.uotake.Uotake;
+import net.zypr.maven.uotake.classes.ItemAction;
 import net.zypr.maven.uotake.classes.Lobby;
 import net.zypr.maven.uotake.classes.Menu;
 import net.zypr.maven.uotake.WeaponData.Weapon;
@@ -55,10 +56,20 @@ public class CommandRegister {
                 .register();
         new CommandAPICommand("test")
                 .withPermission(CommandPermission.OP)
+                .withArguments(new StringArgument("id"))
                 .executes((sender, args) -> {
-                    ItemStack im = new ItemStack(Material.WARPED_FUNGUS_ON_A_STICK);
-                    ((Player) sender).getInventory().setItem(0,im);
-
+                    Integer i = Weapon.buyWeapon((Player) sender,(String) args.get("id"));
+                    if (i == 0) {
+                        sender.sendMessage(ChatColor.GREEN + "購入しました");
+                    } else if (i == 1) {
+                        sender.sendMessage(ChatColor.RED + "所持金語りません");
+                    } else if (i == 2) {
+                        sender.sendMessage(ChatColor.RED + "すでに所持しています");
+                    } else if (i == 3) {
+                        sender.sendMessage(ChatColor.RED + "武器データが存在しません");
+                    } else if (i == 4) {
+                        sender.sendMessage(ChatColor.DARK_RED + "エラーが発生しました");
+                    }
                 })
                 .register();
         new CommandAPICommand("menu")
@@ -68,13 +79,11 @@ public class CommandRegister {
                     Menu.open((Player) sender, (String) args.get("id"));
                 })
                 .register();
-        new CommandAPICommand("wp")
+        new CommandAPICommand("action")
                 .withPermission(CommandPermission.OP)
-                .withArguments(new StringArgument("id"))
+                .withArguments(new GreedyStringArgument("action"))
                 .executes((sender, args) -> {
-                    sender.sendMessage(Weapon.getName((String) args.get("id")));
-                    ItemStack im = new ItemStack(Material.getMaterial(Weapon.getMaterial((String) args.get("id")).toString()));
-                    ((Player) sender).getInventory().setItem(0, im);
+                    ItemAction.action((Player) sender,(String) args.get("action"));
                 })
                 .register();
         new CommandAPICommand("im")

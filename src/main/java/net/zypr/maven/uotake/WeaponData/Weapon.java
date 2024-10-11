@@ -1,6 +1,7 @@
 package net.zypr.maven.uotake.WeaponData;
 
 import net.zypr.maven.uotake.PlayerData.PlayerData;
+import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
 import net.zypr.maven.uotake.Uotake;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,48 +11,36 @@ import java.util.List;
 import java.util.Objects;
 
 public class Weapon {
-    public static String getName(String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
-        for (String s : exList) {
-            if (Uotake.config.contains("weapon." + s + "." + id)) {
-                return String.valueOf(Uotake.config.get("weapon." + s + "." + id + ".name"));
-            }
+
+
+
+    public static String getName(String id, String category) {
+        if (Uotake.config.contains("weapon." + category + "." + id)) {
+            return String.valueOf(Uotake.config.get("weapon." + category + "." + id + ".name"));
         }
         return "!null";
         
     }
 
-    public static Material getMaterial(String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
-        for (String s : exList) {
-            if (Uotake.config.contains("weapon." + s + "." + id)) {
-                return Material.getMaterial(String.valueOf(Uotake.config.get("weapon." + s + "." + id + ".item")));
-            }
+    public static Material getMaterial(String id, String category) {
+        if (Uotake.config.contains("weapon." + category + "." + id)) {
+            return Material.getMaterial(String.valueOf(Uotake.config.get("weapon." + category + "." + id + ".item")));
         }
         return Material.AIR;
     }
 
-    public static Integer getCmd(String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
-        for (String s : exList) {
-            if (Uotake.config.contains("weapon." + s + "." + id)) {
-                return Uotake.config.getInt("weapon." + s + "." + id + ".cmd");
-            }
+    public static Integer getCmd(String id, String category) {
+        if (Uotake.config.contains("weapon." + category + "." + id)) {
+            return Uotake.config.getInt("weapon." + category + "." + id + ".cmd");
         }
         return 0;
     }
 
     public static boolean ifExists (String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
-        for (String s : exList) {
-            if (Uotake.config.contains("weapon." + s + "." + id)) {
-                return true;
-            }
-        }
-        return false;
+        return !(Objects.equals(getCategory(id), "null"));
     }
 
-    public static String getType (String id) {
+    public static String getCategory (String id) {
         List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
         for (String s : exList) {
             if (Uotake.config.contains("weapon." + s + "." + id)) {
@@ -61,36 +50,70 @@ public class Weapon {
         return "null";
     }
 
+    public static String getType (String id) {
+        String category = getCategory(id);
+        if (Uotake.config.contains("weapon." + category + "." + id + ".type")) {
+            return Uotake.config.getString("weapon." + category + "." + id + ".type");
+        }
+        return "null";
+    }
+
     public static boolean ifPlayerHasWeapon(Player p, String id) {
         if (!ifExists(id)) {return false;}
-        String type = getType(id);
+        String category = getCategory(id);
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-        if (Objects.equals(type, "main")) {
+        if (Objects.equals(category, "main")) {
             return playerData.getMainWeapons().contains(id);
-        } else if (Objects.equals(type, "sub")) {
+        } else if (Objects.equals(category, "sub")) {
             return playerData.getSubWeapons().contains(id);
-        } else if (Objects.equals(type, "grenade")) {
+        } else if (Objects.equals(category, "grenade")) {
             return playerData.getGrenades().contains(id);
-        } else if (Objects.equals(type, "food")) {
+        } else if (Objects.equals(category, "food")) {
             return playerData.getFoods().contains(id);
         }
         return false;
     }
 
+    public static Integer getCost(String id) {
+        if (!ifExists(id)) {return -1;}
+        String category = getCategory(id);
+        if (Uotake.config.contains("weapon." + category + "." + id + ".cost")) {
+            return Uotake.config.getInt("weapon." + category + "." + id + ".cost");
+        }
+        return -1;
+    }
+
     public static boolean giveWeapon (Player p, String id) {
         if (!ifExists(id) || ifPlayerHasWeapon(p, id)) {return false;}
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-        String type = getType(id);
-        if (Objects.equals(type, "main")) {
+        String category = getCategory(id);
+        if (Objects.equals(category, "main")) {
             playerData.getMainWeapons().add(id);
-        } else if (Objects.equals(type, "sub")) {
+        } else if (Objects.equals(category, "sub")) {
             playerData.getSubWeapons().add(id);
-        } else if (Objects.equals(type, "grenade")) {
+        } else if (Objects.equals(category, "grenade")) {
             playerData.getGrenades().add(id);
-        } else if (Objects.equals(type, "food")) {
+        } else if (Objects.equals(category, "food")) {
             playerData.getFoods().add(id);
         }
         return true;
+    }
+
+    //If weapon is not exist, return 3; If player has weapon already, return 2; If player has not enought money, return 1; If success, return 0; Something error happened, return 4;
+    public static Integer buyWeapon(Player p, String id) {
+        PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
+        if (!ifExists(id)) {return 3;}
+        if (ifPlayerHasWeapon(p,id)) {return 2;}
+        Integer cost = getCost(id);
+        if (playerData.getMoney() >= cost && cost != -1) {
+            if(giveWeapon(p,id)) {
+                playerData.setMoney(playerData.getMoney() - cost);
+                return 0;
+            } else {
+                return 4;
+            }
+        }
+        return 1;
     }
 
 }
