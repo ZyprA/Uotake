@@ -1,7 +1,8 @@
-package net.zypr.maven.uotake.classes;
+package net.zypr.maven.uotake.util;
 
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
+import net.zypr.maven.uotake.classes.Weapon;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -40,7 +41,7 @@ public class PlaceHolder {
             for (String key: keys) {
                 for (String index : indexes) {
                     if (key.equals("now")) {
-                        result = result.replace("{equip_now_" + index + "_name}",Weapon.getName(equipment.get(select).get(index)));
+                        result = result.replace("{equip_now_" + index + "_name}", Weapon.getName(equipment.get(select).get(index)));
                     } else {
                         result = result.replace("{equip_" + key + "_" + index + "_name}", Weapon.getName(equipment.get(key).get(index)));
                     }

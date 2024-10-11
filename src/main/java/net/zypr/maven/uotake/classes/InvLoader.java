@@ -1,6 +1,7 @@
 package net.zypr.maven.uotake.classes;
 
 import net.zypr.maven.uotake.util.NBTAPI;
+import net.zypr.maven.uotake.util.PlaceHolder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
