@@ -1,0 +1,5 @@
+name: Uotake
+version: '${project.version}'
+main: net.zypr.maven.uotake.Uotake
+depend: [CommandAPI]
+api-version: 1.19
