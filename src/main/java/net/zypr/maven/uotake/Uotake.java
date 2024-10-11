@@ -1,8 +1,8 @@
 package net.zypr.maven.uotake;
 
 import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
-import net.zypr.maven.uotake.classes.CommandRegister;
-import net.zypr.maven.uotake.classes.Scoreboard;
+import net.zypr.maven.uotake.Others.CommandRegister;
+import net.zypr.maven.uotake.Others.Scoreboard;
 import net.zypr.maven.uotake.events.InventoryClick;
 import net.zypr.maven.uotake.events.JoinEvent;
 import net.zypr.maven.uotake.events.OnClickedItem;

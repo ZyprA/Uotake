@@ -1,4 +1,4 @@
-package net.zypr.maven.uotake.classes;
+package net.zypr.maven.uotake.Others;
 import fr.mrmicky.fastboard.FastBoard;
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;

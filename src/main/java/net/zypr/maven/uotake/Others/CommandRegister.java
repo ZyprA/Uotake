@@ -1,10 +1,13 @@
-package net.zypr.maven.uotake.classes;
+package net.zypr.maven.uotake.Others;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
-import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
+import net.zypr.maven.uotake.classes.Lobby;
+import net.zypr.maven.uotake.classes.Menu;
+import net.zypr.maven.uotake.classes.Proxy;
+import net.zypr.maven.uotake.classes.Weapon;
 import net.zypr.maven.uotake.util.ConfigUtil;
 import net.zypr.maven.uotake.util.NBTAPI;
 import org.bukkit.Bukkit;
