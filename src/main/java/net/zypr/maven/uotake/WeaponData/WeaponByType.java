@@ -1,20 +1,18 @@
 package net.zypr.maven.uotake.WeaponData;
 
 import net.zypr.maven.uotake.Uotake;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class WeaponByType {
-    private List<String> WEAPONS_AR = new ArrayList<>();
-    private List<String> WEAPONS_SG = new ArrayList<>();
-    private List<String> WEAPONS_SR = new ArrayList<>();
-    private List<String> WEAPONS_SMG = new ArrayList<>();
-    private List<String> WEAPONS_RL = new ArrayList<>();
-    private List<String> WEAPONS_HG = new ArrayList<>();
+    private final List<String> WEAPONS_AR = new ArrayList<>();
+    private final List<String> WEAPONS_SG = new ArrayList<>();
+    private final List<String> WEAPONS_SR = new ArrayList<>();
+    private final List<String> WEAPONS_SMG = new ArrayList<>();
+    private final List<String> WEAPONS_RL = new ArrayList<>();
+    private final List<String> WEAPONS_HG = new ArrayList<>();
 
     public WeaponByType() {
         ConfigurationSection categories = Uotake.config.getConfigurationSection("weapon");

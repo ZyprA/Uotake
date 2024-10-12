@@ -1,7 +1,6 @@
 package net.zypr.maven.uotake.WeaponData;
 
 import net.zypr.maven.uotake.PlayerData.PlayerData;
-import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
 import net.zypr.maven.uotake.Uotake;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +14,7 @@ public class Weapon {
 
 
     public static String getName(String id, String category) {
-        if (Uotake.config.contains("weapon." + category + "." + id)) {
+        if (Uotake.config.isSet("weapon." + category + "." + id)) {
             return String.valueOf(Uotake.config.get("weapon." + category + "." + id + ".name"));
         }
         return "!null";
@@ -23,14 +22,14 @@ public class Weapon {
     }
 
     public static Material getMaterial(String id, String category) {
-        if (Uotake.config.contains("weapon." + category + "." + id)) {
+        if (Uotake.config.isSet("weapon." + category + "." + id)) {
             return Material.getMaterial(String.valueOf(Uotake.config.get("weapon." + category + "." + id + ".item")));
         }
         return Material.AIR;
     }
 
     public static Integer getCmd(String id, String category) {
-        if (Uotake.config.contains("weapon." + category + "." + id)) {
+        if (Uotake.config.isSet("weapon." + category + "." + id)) {
             return Uotake.config.getInt("weapon." + category + "." + id + ".cmd");
         }
         return 0;
@@ -39,21 +38,17 @@ public class Weapon {
     public static boolean ifExists (String id) {
         return !(Objects.equals(getCategory(id), "null"));
     }
+    public static boolean ifExists (String id, String category) {
+        return Uotake.config.isSet("weapon." + category + "." + id);
+    }
+
 
     public static String getCategory (String id) {
         List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
         for (String s : exList) {
-            if (Uotake.config.contains("weapon." + s + "." + id)) {
+            if (Uotake.config.isSet("weapon." + s + "." + id)) {
                 return s;
             }
-        }
-        return "null";
-    }
-
-    public static String getType (String id) {
-        String category = getCategory(id);
-        if (Uotake.config.contains("weapon." + category + "." + id + ".type")) {
-            return Uotake.config.getString("weapon." + category + "." + id + ".type");
         }
         return "null";
     }

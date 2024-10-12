@@ -4,9 +4,9 @@ import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.PlaceHolder;
 import org.bukkit.Sound;
+
 import org.bukkit.entity.Player;
 
-import java.util.Iterator;
 import java.util.Objects;
 
 
@@ -54,9 +54,8 @@ public class ItemAction {
                     break;
                 case "status":
                     if (Uotake.config.contains("display.status")) {
-                        Iterator it = Uotake.config.getList("display.status").iterator();
-                        while(it.hasNext()) {
-                            p.sendMessage(PlaceHolder.r((String) it.next(),p,"player"));
+                        for (Object o : Objects.requireNonNull(Uotake.config.getList("display.status"))) {
+                            p.sendMessage(PlaceHolder.r((String) o, p, "player"));
                         }
                     }
                     break;
@@ -66,9 +65,23 @@ public class ItemAction {
                         if (settingParams.length == 2) {
                             Uotake.playerDataManager.getPlayerData(p.getUniqueId()).setSelect(settingParams[1]);
                         } else if (settingParams.length == 3) {
-                            if (settingParams[])
+                            Menu.open(p,args[1]);
+
+                        }
+                    } else if (Objects.equals(settingParams[0], "select")) {
+                    if (settingParams.length == 4) {
+                        String selector = settingParams[1];
+                        if (Objects.equals(selector, "a") || Objects.equals(selector, "b")) {
+                            String category = settingParams[2];
+                            String weapon = settingParams[3];
+                            if(Weapon.ifExists(weapon,category)) {
+                                Uotake.playerDataManager.getPlayerData(p.getUniqueId()).getEquipment().get(selector).put(category,weapon);
+                                Menu.open(p,"equipeditor");
+                                p.playSound(p,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR,1f,1f);
+                            }
                         }
                     }
+                }
                 default:
                     break;
 

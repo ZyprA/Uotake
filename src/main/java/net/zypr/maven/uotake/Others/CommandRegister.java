@@ -27,7 +27,7 @@ public class CommandRegister {
                 .withAliases("broadcast", "broadcastmessage")       // Command aliases
                 .withPermission(CommandPermission.OP)               // Required permissions
                 .executes((sender, args) -> {
-                    String message = (String) args.get("message");
+                    String message =  String.valueOf(args.get("message"));
                     Bukkit.getServer().broadcastMessage(message);
                 })
                 .register();
@@ -41,12 +41,6 @@ public class CommandRegister {
                     }
                 })
                 .register();
-        new CommandAPICommand("getallvalues")
-                .withPermission(CommandPermission.OP)
-                .executes((sender, args) -> {
-                    sender.sendMessage(NBTAPI.getAllValues(((Player) sender).getInventory().getItemInMainHand()).toString());
-                })
-                .register();
         new CommandAPICommand("getnbt")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new StringArgument("tag"))
@@ -58,7 +52,7 @@ public class CommandRegister {
                 .withPermission(CommandPermission.OP)
                 .withArguments(new StringArgument("id"))
                 .executes((sender, args) -> {
-                    Integer i = Weapon.buyWeapon((Player) sender,(String) args.get("id"));
+                    int i = Weapon.buyWeapon((Player) sender,(String) args.get("id"));
                     if (i == 0) {
                         sender.sendMessage(ChatColor.GREEN + "購入しました");
                     } else if (i == 1) {
@@ -76,21 +70,21 @@ public class CommandRegister {
                 .withPermission(CommandPermission.OP)
                 .withArguments(new StringArgument("id"))
                 .executes((sender, args) -> {
-                    Menu.open((Player) sender, (String) args.get("id"));
+                    Menu.open((Player) sender, String.valueOf(args.get("id")));
                 })
                 .register();
         new CommandAPICommand("action")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new GreedyStringArgument("action"))
                 .executes((sender, args) -> {
-                    ItemAction.action((Player) sender,(String) args.get("action"));
+                    ItemAction.action((Player) sender,String.valueOf(args.get("action")));
                 })
                 .register();
         new CommandAPICommand("im")
                 .withPermission(CommandPermission.OP)
                 .withArguments(new GreedyStringArgument("material"))
                 .executes((sender, args) -> {
-                    ItemStack im = new ItemStack(Material.valueOf(args.get("material").toString()));
+                    ItemStack im = new ItemStack(Material.valueOf(String.valueOf(args.get("material"))));
                     ((Player) sender).getInventory().setItem(0, im);
                 })
                 .register();
