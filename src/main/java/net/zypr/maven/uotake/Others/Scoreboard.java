@@ -12,20 +12,26 @@ import java.util.Map;
 
 public class Scoreboard implements Listener {
     private static FastBoard board;
-    private static Map<Player, FastBoard> boards = new HashMap<>();
+    private static final Map<Player, FastBoard> boards = new HashMap<>();
     private static final int LOOP_TIME = 100; //5秒
+
+    public static void deleteBoard(Player player) {
+        boards.remove(player);
+    }
     public void showScoreboard() {
         new BukkitRunnable() {
             @Override
             public void run() {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-                    if (boards.get(p) != null) {
-                        boards.get(p).delete();
-                        boards.remove(p);
+                    if (boards.get(p) == null) {
+                        board = new FastBoard(p);
+                        p.sendMessage("ボードを作成しました");
+                        boards.put(p, board);
+                    } else {
+                        board = boards.get(p);
                     }
 
-                    board = new FastBoard(p);
                     board.updateTitle("§b§lUotakeGunOnline");
                     board.updateLines(
                             "§f================",

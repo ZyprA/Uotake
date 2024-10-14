@@ -1,4 +1,4 @@
-package net.zypr.maven.uotake.classes;
+package net.zypr.maven.uotake.Others;
 
 import net.zypr.maven.uotake.Uotake;
 import org.bukkit.Location;

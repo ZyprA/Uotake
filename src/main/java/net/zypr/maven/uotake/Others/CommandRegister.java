@@ -5,7 +5,6 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.classes.ItemAction;
-import net.zypr.maven.uotake.classes.Lobby;
 import net.zypr.maven.uotake.classes.Menu;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.ConfigUtil;

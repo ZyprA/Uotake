@@ -1,9 +1,9 @@
 package net.zypr.maven.uotake.events;
 
-import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
+import net.zypr.maven.uotake.Others.Scoreboard;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.classes.InvLoader;
-import net.zypr.maven.uotake.classes.Lobby;
+import net.zypr.maven.uotake.Others.Lobby;
 import net.zypr.maven.uotake.classes.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,5 +35,6 @@ public class JoinEvent implements Listener {
         Player player = event.getPlayer();
         Uotake.playerDataManager.savePlayerData(player);
         Uotake.playerDataManager.removePlayerData(player.getUniqueId());
+        Scoreboard.deleteBoard(event.getPlayer());
     }
 }

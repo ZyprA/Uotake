@@ -42,9 +42,9 @@ public class Uotake extends JavaPlugin {
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         plugin = this;
         config = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/config.yml"));
-        menu = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/menu.yml"));
-        inventory = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/inventory.yml"));
-        variable = new ConfigUtil("/setting/variable.yml");
+        menu = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/lobby/menu.yml"));
+        inventory = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/lobby/inventory.yml"));
+        variable = new ConfigUtil("/setting/lobby/variable.yml");
         playerDataManager = new PlayerDataManager();
         new Scoreboard().showScoreboard();
         weaponbytype = new WeaponByType();
