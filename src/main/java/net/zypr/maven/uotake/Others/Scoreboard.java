@@ -16,7 +16,10 @@ public class Scoreboard implements Listener {
     private static final int LOOP_TIME = 100; //5秒
 
     public static void deleteBoard(Player player) {
-        boards.remove(player);
+        FastBoard board = boards.remove(player);
+        if (board != null) {
+            board.delete();
+        }
     }
     public void showScoreboard() {
         new BukkitRunnable() {
@@ -26,7 +29,6 @@ public class Scoreboard implements Listener {
                     PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
                     if (boards.get(p) == null) {
                         board = new FastBoard(p);
-                        p.sendMessage("ボードを作成しました");
                         boards.put(p, board);
                     } else {
                         board = boards.get(p);

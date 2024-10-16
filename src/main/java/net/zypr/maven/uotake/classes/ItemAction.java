@@ -1,5 +1,6 @@
 package net.zypr.maven.uotake.classes;
 
+import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.PlaceHolder;
@@ -27,37 +28,43 @@ public class ItemAction {
                     switch (buy) {
                         case 0:
                             p.sendMessage("§a購入成功。");
-                            p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
+                            p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
                             break;
                         case 1:
                             p.sendMessage("§c所持金が不足しているため購入できません。");
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                             break;
                         case 2:
                             p.sendMessage("§cすでに所持しているため購入できません。");
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                             break;
                         case 3:
                             p.sendMessage("§c武器のデータが存在しません。管理者に問い合わせてください。");
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                             break;
                         default:
                             p.sendMessage("§c予期しないエラーが発生しました。管理者に問い合わせてください。");
-                            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                             break;
                     }
                 case "Sound":
                     if (args.length != 2) {return;}
                     String[] soundParams = args[1].split(",");
                     if (soundParams.length != 3) {return;}
-                    p.playSound(p.getLocation(), soundParams[0], Float.parseFloat(soundParams[1]),Float.parseFloat(soundParams[2]));
+                    p.playSound(p, soundParams[0], Float.parseFloat(soundParams[1]),Float.parseFloat(soundParams[2]));
                     break;
                 case "status":
-                    if (Uotake.config.contains("display.status")) {
-                        for (Object o : Objects.requireNonNull(Uotake.config.getList("display.status"))) {
-                            p.sendMessage(PlaceHolder.r((String) o, p, "player"));
-                        }
-                    }
+                    PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
+                    int kills = playerData.getBattleStatus().getKills();
+                    int deaths = playerData.getBattleStatus().getDeaths();
+                    int kd = (deaths == 0) ? (kills == 0 ? 0 : null) : 0;
+                    p.sendMessage("§f§m┌§f======§d【" + p.getDisplayName() + " のステータス情報】§f========",
+                            "§f|| §aキル数: " + kills + "    §cデス数: " + deaths + "    §5KD: " + kd,
+                            "§f|| §6階級: §f" + Uotake.config.getString("rank." + playerData.getRank() + ".name") + "§f[" + playerData.getRank() + "§f]    §4BonusPoint: " + playerData.getBattleStatus().getBonusPoints(),
+                            "§f|| §f所持金: §e" + playerData.getMoney(),
+                            "§f|| §7移動速度: 0    筋力: 0    防御力: 0",
+                            "§f|| §7連射速度: 0    リロード速度: 0    命中精度: 0",
+                            "§f§m└§f============================");
                     break;
                 case "setting":
                     String[] settingParams = args[1].split("\\.");
