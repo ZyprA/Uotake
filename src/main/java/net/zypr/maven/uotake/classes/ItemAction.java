@@ -1,9 +1,10 @@
 package net.zypr.maven.uotake.classes;
 
+import net.zypr.maven.uotake.Menu.Menu;
+import net.zypr.maven.uotake.Others.Proxy;
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
-import net.zypr.maven.uotake.util.PlaceHolder;
 import org.bukkit.Sound;
 
 import org.bukkit.entity.Player;
@@ -18,6 +19,10 @@ public class ItemAction {
         for (String param :params) {
             String[] args = param.split("@");
             switch (args[0]) {
+                case "server":
+                    if (args.length != 2) {return;}
+                    Proxy.sendPlayerToServer(p,args[1]);
+                    break;
                 case "OpenMenu":
                     if (args.length != 2) {return;}
                     Menu.open(p, args[1]);

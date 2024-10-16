@@ -4,10 +4,7 @@ import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
 import net.zypr.maven.uotake.Others.CommandRegister;
 import net.zypr.maven.uotake.Others.Scoreboard;
 import net.zypr.maven.uotake.WeaponData.WeaponByType;
-import net.zypr.maven.uotake.events.InventoryClick;
-import net.zypr.maven.uotake.events.JoinEvent;
-import net.zypr.maven.uotake.events.NPCClick;
-import net.zypr.maven.uotake.events.OnClickedItem;
+import net.zypr.maven.uotake.events.*;
 import net.zypr.maven.uotake.util.ConfigUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,6 +34,7 @@ public class Uotake extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnClickedItem(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(), this);
         getServer().getPluginManager().registerEvents(new NPCClick(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
 
         CommandRegister.load();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

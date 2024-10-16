@@ -5,7 +5,7 @@ import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.*;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.classes.ItemAction;
-import net.zypr.maven.uotake.classes.Menu;
+import net.zypr.maven.uotake.Menu.Menu;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.ConfigUtil;
 import net.zypr.maven.uotake.util.NBTAPI;
@@ -99,9 +99,8 @@ public class CommandRegister {
                 .withPermission(CommandPermission.OP)
                 .executes((sender, args) -> {
                     Uotake.config = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/config.yml"));
-                    Uotake.menu = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/menu.yml"));
-                    Uotake.inventory = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/inventory.yml"));
-                    Uotake.variable = new ConfigUtil("/setting/variable.yml");
+                    Uotake.menu = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/lobby/menu.yml"));
+                    Uotake.inventory = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/lobby/inventory.yml"));
                     sender.sendMessage(ChatColor.GREEN + "読み込ました");
                 })
                 .register();

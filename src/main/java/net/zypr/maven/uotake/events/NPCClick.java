@@ -2,7 +2,7 @@ package net.zypr.maven.uotake.events;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import net.zypr.maven.uotake.classes.Menu;
+import net.zypr.maven.uotake.Menu.Menu;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

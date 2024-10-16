@@ -1,8 +1,11 @@
-package net.zypr.maven.uotake.classes;
+package net.zypr.maven.uotake.Menu;
 
+import net.zypr.maven.uotake.Menu.packs.gameselect;
+import net.zypr.maven.uotake.Menu.packs.mainmenu;
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
+import net.zypr.maven.uotake.classes.InvLoader;
 import net.zypr.maven.uotake.util.InvHolder;
 import net.zypr.maven.uotake.util.NBTAPI;
 import org.bukkit.Bukkit;
@@ -19,7 +22,11 @@ import java.util.Objects;
 public class Menu {
     public static void open(Player p, String id) {
         p.closeInventory();
-        if (id.startsWith("equip.")) {
+        if (Objects.equals(id, "gameselect")) {
+            p.openInventory(gameselect.get());
+        } else if (Objects.equals(id, "mainmenu")) {
+            p.openInventory(mainmenu.get());
+        } else if (id.startsWith("equip.")) {
             String[] params = id.split("\\.");
             if (Objects.equals(params[1], "a") || Objects.equals(params[1], "b")) {
                 PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());

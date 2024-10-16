@@ -13,23 +13,7 @@ import java.util.Objects;
 public class PlaceHolder {
     public static String r(String text, Player p, String prefix) {
         String result = text;
-        if (Objects.equals(prefix, "player")) {
-            PlayerData data = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-            result = result.replace("{player_name}",p.getName());
-            result = result.replace("{player_kill}",String.valueOf(data.getBattleStatus().getKills()));
-            result = result.replace("{player_death}",String.valueOf(data.getBattleStatus().getDeaths()));
-            result = result.replace("{player_kd}",String.valueOf(data.getBattleStatus().getDeaths() != 0 ? data.getBattleStatus().getKills() / data.getBattleStatus().getDeaths() : 0));
-            result = result.replace("{player_rank_prefix}",String.valueOf(Uotake.config.get("rank." + String.valueOf(data.getRank()) + ".prefix")));
-            result = result.replace("{player_rank}",String.valueOf(data.getRank()));
-            result = result.replace("{player_bp}",String.valueOf(data.getBattleStatus().getBonusPoints()));
-            result = result.replace("{player_money}",String.valueOf(data.getMoney()));
-            result = result.replace("{player_speed}","0");
-            result = result.replace("{player_power}","0");
-            result = result.replace("{player_defence}","0");
-            result = result.replace("{player_fr}","0");
-            result = result.replace("{player_reload}","0");
-            result = result.replace("{player_accuracy}","0");
-        } else if (Objects.equals(prefix, "name")) {
+        if (Objects.equals(prefix, "name")) {
             PlayerData data = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
             String select = data.getSelect();
             Map<String , Map<String, String>> equipment = (data.getEquipment());
