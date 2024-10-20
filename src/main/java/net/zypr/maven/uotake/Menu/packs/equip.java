@@ -27,9 +27,9 @@ public class equip {
             if (Weapon.isCategory(params[1])) {
                 weapons = playerData.getWeapons(params[1]);
                 inventory = Bukkit.createInventory(new InvHolder(), (((weapons.size() - 1) / 9) + 1) * 9 , "§8装備の変更");
+                ItemCreator creator = new ItemCreator();
                 for(String weapon : weapons) {
                     if (Weapon.ifExists(weapon)) {
-                        ItemCreator creator = new ItemCreator();
                         inventory.setItem(slot, creator.setMaterial(Weapon.getMaterial(weapon,params[1])).setCmd(Weapon.getCmd(weapon,params[1])).setName(weapon).setAction("setting@select." + params[0] + "." + params[1] + "." + weapon).setAmount(Weapon.getAmount(weapon,params[1])).setLore(Weapon.getDescription(weapon,params[1])).generate());
                         slot++;
                     }
