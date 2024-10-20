@@ -26,7 +26,7 @@ public class mainmenu {
                 case 2:
                     material = Material.BRICK;
                     display = "§b武器選択§7>>メニューを開く";
-                    action = "OpenMenu@equipeditor/Sound@block.note_block.hat,1,1";
+                    action = "OpenMenu@equipeditor/Sound@block.chest.open,1,1";
                     break;
                 case 4:
                     material = Material.WRITABLE_BOOK;

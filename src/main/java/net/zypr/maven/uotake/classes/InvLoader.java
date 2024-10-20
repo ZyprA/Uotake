@@ -1,15 +1,15 @@
 package net.zypr.maven.uotake.classes;
 
-import net.zypr.maven.uotake.util.NBTAPI;
-import net.zypr.maven.uotake.util.PlaceHolder;
+import net.zypr.maven.uotake.PlayerData.PlayerData;
+import net.zypr.maven.uotake.Uotake;
+import net.zypr.maven.uotake.WeaponData.Weapon;
+import net.zypr.maven.uotake.util.ItemCreator;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.Map;
 
 public class InvLoader {
     public static void load(org.bukkit.inventory.Inventory inventory,List<ItemStack> items) {
@@ -21,41 +21,25 @@ public class InvLoader {
         }
     }
 
-    public static void load(org.bukkit.inventory.Inventory inventory, FileConfiguration yaml, String path, Player p) {
-        List<Map<?, ?>> itemList = yaml.getMapList(path);
-        inventory.clear();
-
-        for (Map<?, ?> itemData : itemList) {
-            // 必要なデータが揃っていなければスキップ
-            if (!itemData.containsKey("type")) continue;
-
-            // アイテムID（デフォルト値を設定）
-            byte itemId = itemData.containsKey("iv") ? Byte.parseByte(PlaceHolder.r(itemData.get("iv").toString(),p,"iv")) : 0;
-            String type = PlaceHolder.r(itemData.get("type").toString(), p, "item");
-            ItemStack item = new ItemStack(Material.valueOf(type), 1, itemId);
-
-            // NBTタグの追加
-            if (itemData.containsKey("tags")) {
-                ((Map<String, Object>) itemData.get("tags")).forEach((tag, value) -> {
-                    NBTAPI.addNBT(item, tag, value.toString());
-                });
-            }
-
-            // アイテムメタデータの設定
-            ItemMeta itemMeta = item.getItemMeta();
-            if (itemMeta != null) {
-                if (itemData.containsKey("name")) {
-                    itemMeta.setDisplayName(PlaceHolder.r(itemData.get("name").toString(), p, "name"));
-                }
-                if (itemData.containsKey("cmd")) {
-                    itemMeta.setCustomModelData(Integer.valueOf(PlaceHolder.r(itemData.get("cmd").toString(), p, "cmd")));
-                }
-                item.setItemMeta(itemMeta);
-            }
-
-            // スロット設定
-            int slot = itemData.containsKey("slot") ? (int) itemData.get("slot") : 0;
-            inventory.setItem(slot, item);
-        }
+    public static void lobby(Player p) {
+        p.getInventory().clear();
+        Inventory inventory = p.getInventory();
+        PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
+        String select = playerData.getSelect();
+        String weapon;
+        ItemCreator creator = new ItemCreator();
+        weapon = playerData.getEquipment().get(select).get("main");
+        inventory.setItem(0,creator.setMaterial(Weapon.getMaterial(weapon,"main")).setName(Weapon.getName(weapon, "main")).setCmd(Weapon.getCmd(weapon,"main")).generate());
+        weapon = playerData.getEquipment().get(select).get("sub");
+        inventory.setItem(1,creator.setMaterial(Weapon.getMaterial(weapon,"sub")).setName(Weapon.getName(weapon, "sub")).setCmd(Weapon.getCmd(weapon,"sub")).generate());
+        weapon = playerData.getEquipment().get(select).get("grenade");
+        inventory.setItem(2,creator.setMaterial(Weapon.getMaterial(weapon,"grenade")).setName(Weapon.getName(weapon, "grenade")).setCmd(Weapon.getCmd(weapon,"grenade")).setAmount(Weapon.getAmount(weapon,"grenade")).generate());
+        weapon = playerData.getEquipment().get(select).get("food");
+        inventory.setItem(3,creator.setMaterial(Weapon.getMaterial(weapon,"food")).setName(Weapon.getName(weapon, "food")).generate());
+        creator.reset();
+        inventory.setItem(6,creator.setMaterial(Material.CLOCK).setName("§bNetwork Menu§7>>§c§l右クリック").setAction("OpenMenu@mainmenu/Sound@entity.firework_rocket.large_blast,1,2").generate());
+        inventory.setItem(7,creator.setMaterial(Material.BOOK).setName("§bプレイヤー情報§7>>§c§l右クリック").setAction("status").generate());
+        inventory.setItem(8,creator.setMaterial(Material.BRICK).setName("§b武器選択§7>>§c§l右クリック").setAction("OpenMenu@equipeditor/Sound@block.chest.open,1,1").generate());
+        creator.reset();
     }
 }

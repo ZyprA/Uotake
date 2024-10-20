@@ -12,13 +12,22 @@ import java.util.Objects;
 public class Weapon {
 
 
+    public static boolean isCategory(String category) {
+        return (Objects.equals(category, "main") || Objects.equals(category, "sub") || Objects.equals(category, "grenade") || Objects.equals(category, "food"));
+    }
+    public static int getAmount(String id, String category) {
+        if (Uotake.config.isSet("weapon." + category + "." + id + ".amount")) {
+            return Uotake.config.getInt("weapon." + category + "." + id + ".amount");
+        }
+        return 1;
+    }
+
+    public static List<String> getDescription(String id, String category) {
+        return Uotake.config.getStringList("weapon." + category + "." + id + ".description");
+    }
 
     public static String getName(String id, String category) {
-        if (Uotake.config.isSet("weapon." + category + "." + id)) {
-            return String.valueOf(Uotake.config.get("weapon." + category + "." + id + ".name"));
-        }
-        return "!null";
-        
+        return Uotake.config.getString("weapon." + category + "." + id + ".name");
     }
 
     public static Material getMaterial(String id, String category) {

@@ -30,11 +30,10 @@ public class Scoreboard implements Listener {
                     if (boards.get(p) == null) {
                         board = new FastBoard(p);
                         boards.put(p, board);
+                        board.updateTitle("§b§lUotakeGunOnline");
                     } else {
                         board = boards.get(p);
                     }
-
-                    board.updateTitle("§b§lUotakeGunOnline");
                     board.updateLines(
                             "§f================",
                             "§d§l Your Status",

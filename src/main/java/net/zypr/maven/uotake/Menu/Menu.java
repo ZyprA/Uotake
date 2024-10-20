@@ -1,9 +1,9 @@
 package net.zypr.maven.uotake.Menu;
 
 import net.zypr.maven.uotake.Menu.packs.equip;
+import net.zypr.maven.uotake.Menu.packs.equipeditor;
 import net.zypr.maven.uotake.Menu.packs.gameselect;
 import net.zypr.maven.uotake.Menu.packs.mainmenu;
-import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.classes.InvLoader;
@@ -27,6 +27,8 @@ public class Menu {
             p.openInventory(gameselect.get());
         } else if (Objects.equals(id, "mainmenu")) {
             p.openInventory(mainmenu.get());
+        } else if (Objects.equals(id, "equipeditor")) {
+            p.openInventory(equipeditor.get(p));
         } else if (id.startsWith("equip.")) {
             String[] params = id.split("\\.");
             p.openInventory(equip.get(params[1] + "." + params[2],p));
@@ -56,11 +58,7 @@ public class Menu {
             Inventory inv = Bukkit.createInventory(new InvHolder(), (((weapons.size() - 1) / 9) + 1) * 9 ,"§8§l" + title);
             InvLoader.load(inv, itemStacks);
             p.openInventory(inv);
-        } else if (Uotake.menu.contains(id)) { //menu.ymlから読み込み
-            Inventory inv = Bukkit.createInventory(new InvHolder(), Integer.parseInt( String.valueOf(Uotake.menu.get(id + ".size"))),(String) Objects.requireNonNull(Uotake.menu.get(id + ".title")));
-            InvLoader.load(inv,Uotake.menu,id + ".contents", p);
-            p.openInventory(inv);
-        } else {
+        }else {
             p.sendMessage(ChatColor.RED + "メニュー情報が存在しません．管理者に問い合わせてください");
         }
     }

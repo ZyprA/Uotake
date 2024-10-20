@@ -30,6 +30,20 @@ public class PlayerData {
         this.bloodSetting = bloodSetting;
     }
 
+    public List<String> getWeapons(String category) {
+        switch (category) {
+            case "main":
+                return this.mainWeapons;
+            case "sub":
+                return this.subWeapons;
+            case "grenade":
+                return this.grenades;
+            case "food":
+                return this.foods;
+            default:
+                return null;
+        }
+    }
     // ゲッターとセッター
     public int getRank() {
         return rank;
@@ -111,4 +125,3 @@ public class PlayerData {
         this.bloodSetting = bloodSetting;
     }
 }
-

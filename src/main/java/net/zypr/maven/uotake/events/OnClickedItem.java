@@ -2,7 +2,6 @@ package net.zypr.maven.uotake.events;
 
 import net.zypr.maven.uotake.classes.ItemAction;
 import net.zypr.maven.uotake.util.NBTAPI;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,8 +20,7 @@ public class OnClickedItem implements Listener {
             setCooldown(player.getUniqueId());
             if (NBTAPI.hasNBT(player.getInventory().getItemInMainHand(),"action")) {
                 ItemAction.action(player,NBTAPI.getNBT(player.getInventory().getItemInMainHand(),"action"));
-            };
-            event.getPlayer().sendMessage(event.getPlayer().getInventory().getItemInMainHand().getData().toString());
+            }
         }
     }
 
