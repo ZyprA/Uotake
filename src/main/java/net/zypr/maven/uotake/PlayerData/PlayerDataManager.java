@@ -16,26 +16,46 @@ public class PlayerDataManager {
     public void loadPlayerData(Player player) {
         UUID uuid = player.getUniqueId();
         File file = new File(Uotake.getRoot() + "/users/" + uuid + ".yml");
-
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        FileConfiguration playerfile = YamlConfiguration.loadConfiguration(file);
+        List<String> contents = (List<String>) Uotake.config.getList("load_contents.contents");
+        if (contents != null) {
+            for (String index : contents) {
+                if (!playerfile.isSet(index)) {
+                    Object value = Uotake.config.get("load_contents.settings." + index);
+                    playerfile.set(index, value);
+                    player.sendMessage(index + "を追加しました。: " + value);
+                }
+            }
+        }
+        try {
+            playerfile.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (file.exists()) {
             player.sendMessage("読み込みました");
-            // ファイルがある場合は読み込み
-            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
             // プレイヤーデータの読み込み
-            int rank = config.getInt("user.rank");
-            int money = config.getInt("user.money");
+            int rank = playerfile.getInt("user.rank");
+            int money = playerfile.getInt("user.money");
 
-            List<String> mainWeapons = config.getStringList("weapons.main");
-            List<String> subWeapons = config.getStringList("weapons.sub");
-            List<String> grenades = config.getStringList("weapons.grenade");
-            List<String> foods = config.getStringList("weapons.food");
+            List<String> mainWeapons = playerfile.getStringList("weapons.main");
+            List<String> subWeapons = playerfile.getStringList("weapons.sub");
+            List<String> grenades = playerfile.getStringList("weapons.grenade");
+            List<String> foods = playerfile.getStringList("weapons.food");
 
             // equipmentセクションの読み込み
-            String select = config.getString("equipment.select");
+            String select = playerfile.getString("equipment.select");
 
             Map<String, Map<String, String>> equipment = new HashMap<>();
-            ConfigurationSection equipmentSection = config.getConfigurationSection("equipment");
+            ConfigurationSection equipmentSection = playerfile.getConfigurationSection("equipment");
 
             if (equipmentSection != null) {
                 for (String key : equipmentSection.getKeys(false)) {
@@ -53,14 +73,14 @@ public class PlayerDataManager {
 
             // battle_statusセクションの読み込み
             BattleStatus battleStatus = new BattleStatus(0,0,0,0,0,0);
-            battleStatus.setWins(config.getInt("battle_status.wins"));
-            battleStatus.setLosses(config.getInt("battle_status.losses"));
-            battleStatus.setDraws(config.getInt("battle_status.draws"));
-            battleStatus.setKills(config.getInt("battle_status.kills"));
-            battleStatus.setDeaths(config.getInt("battle_status.deaths"));
-            battleStatus.setBonusPoints(config.getInt("battle_status.bonuspoint"));
+            battleStatus.setWins(playerfile.getInt("battle_status.wins"));
+            battleStatus.setLosses(playerfile.getInt("battle_status.losses"));
+            battleStatus.setDraws(playerfile.getInt("battle_status.draws"));
+            battleStatus.setKills(playerfile.getInt("battle_status.kills"));
+            battleStatus.setDeaths(playerfile.getInt("battle_status.deaths"));
+            battleStatus.setBonusPoints(playerfile.getInt("battle_status.bonuspoint"));
 
-            boolean bloodSetting = config.getBoolean("setting.blood");
+            boolean bloodSetting = playerfile.getBoolean("setting.blood");
 
             // プレイヤーデータを作成
             PlayerData data = new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, equipment, select, battleStatus, bloodSetting);
@@ -81,34 +101,34 @@ public class PlayerDataManager {
             }
         }
 
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        config.set("user.rank", data.getRank());
-        config.set("user.money", data.getMoney());
-        config.set("weapons.main", data.getMainWeapons());
-        config.set("weapons.sub", data.getSubWeapons());
-        config.set("weapons.grenade", data.getGrenades());
-        config.set("weapons.food", data.getFoods());
+        FileConfiguration playerfile = YamlConfiguration.loadConfiguration(file);
+        playerfile.set("user.rank", data.getRank());
+        playerfile.set("user.money", data.getMoney());
+        playerfile.set("weapons.main", data.getMainWeapons());
+        playerfile.set("weapons.sub", data.getSubWeapons());
+        playerfile.set("weapons.grenade", data.getGrenades());
+        playerfile.set("weapons.food", data.getFoods());
 
         // equipmentの保存
-        config.set("equipment.select", data.getSelect());
+        playerfile.set("equipment.select", data.getSelect());
         for (String key : data.getEquipment().keySet()) {
             Map<String, String> equipment = data.getEquipment().get(key);
-            config.createSection("equipment." + key, equipment);
+            playerfile.createSection("equipment." + key, equipment);
         }
 
         // battle_statusの保存
         BattleStatus battleStatus = data.getBattleStatus();
-        config.set("battle_status.wins", battleStatus.getWins());
-        config.set("battle_status.losses", battleStatus.getLosses());
-        config.set("battle_status.draws", battleStatus.getDraws());
-        config.set("battle_status.kills", battleStatus.getKills());
-        config.set("battle_status.deaths", battleStatus.getDeaths());
-        config.set("battle_status.bonuspoint", battleStatus.getBonusPoints());
+        playerfile.set("battle_status.wins", battleStatus.getWins());
+        playerfile.set("battle_status.losses", battleStatus.getLosses());
+        playerfile.set("battle_status.draws", battleStatus.getDraws());
+        playerfile.set("battle_status.kills", battleStatus.getKills());
+        playerfile.set("battle_status.deaths", battleStatus.getDeaths());
+        playerfile.set("battle_status.bonuspoint", battleStatus.getBonusPoints());
 
-        config.set("setting.blood", data.isBloodSetting());
+        playerfile.set("setting.blood", data.isBloodSetting());
 
         try {
-            config.save(file);
+            playerfile.save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }

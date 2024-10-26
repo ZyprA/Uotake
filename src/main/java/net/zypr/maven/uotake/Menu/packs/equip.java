@@ -5,19 +5,14 @@ import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.util.InvHolder;
 import net.zypr.maven.uotake.util.ItemCreator;
-import net.zypr.maven.uotake.util.NBTAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
 public class equip {
     public static Inventory get(String param, Player p) { //a.main
-        ItemStack item;
         String[] params = param.split("\\.");
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
         int slot = 0;
