@@ -35,7 +35,7 @@ public class InvLoader {
         weapon = playerData.getEquipment().get(select).get("grenade");
         inventory.setItem(2,creator.setMaterial(Weapon.getMaterial(weapon,"grenade")).setName(Weapon.getName(weapon, "grenade")).setCmd(Weapon.getCmd(weapon,"grenade")).setAmount(Weapon.getAmount(weapon,"grenade")).generate());
         weapon = playerData.getEquipment().get(select).get("food");
-        inventory.setItem(3,creator.setMaterial(Weapon.getMaterial(weapon,"food")).setName(Weapon.getName(weapon, "food")).generate());
+        inventory.setItem(3,creator.setMaterial(Weapon.getMaterial(weapon,"food")).setName(Weapon.getName(weapon, "food")).setAmount(Weapon.getAmount(weapon,"food")).generate());
         creator.reset();
         inventory.setItem(6,creator.setMaterial(Material.CLOCK).setName("§bNetwork Menu§7>>§c§l右クリック").setAction("OpenMenu@mainmenu/Sound@entity.firework_rocket.large_blast,1,2").generate());
         inventory.setItem(7,creator.setMaterial(Material.BOOK).setName("§bプレイヤー情報§7>>§c§l右クリック").setAction("status").generate());

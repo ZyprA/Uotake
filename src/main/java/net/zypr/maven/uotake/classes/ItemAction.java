@@ -80,7 +80,6 @@ public class ItemAction {
                             playerData.setSelect(settingParams[1]);
                         } else if (settingParams.length == 3) {
                             Menu.open(p,args[1]);
-
                         }
                     } else if (Objects.equals(settingParams[0], "select")) {
                         if (settingParams.length == 4) {
@@ -95,6 +94,12 @@ public class ItemAction {
                                 }
                             }
                         }
+                    } else if (Objects.equals(settingParams[0], "armbool")) {
+                        if (settingParams.length == 2) {
+                            playerData.getEquipment().get("armor").put("boolean",settingParams[1]);
+                        }
+                    } else {
+                        p.sendMessage("§c登録されていないアクションが実行されました: 管理者に問い合わせてください");
                     }
                     break;
                 default:

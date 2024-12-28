@@ -10,13 +10,17 @@ public class PlayerData {
     private List<String> subWeapons;
     private List<String> grenades;
     private List<String> foods;
+    private List<String> head;
+    private List<String> body;
+    private List<String> legs;
+    private List<String> foot;
     private Map<String, Map<String, String>> equipment; // A, B, Armor
     private String select;
     private BattleStatus battleStatus;
     private boolean bloodSetting;
 
     public PlayerData(int rank, int money, List<String> mainWeapons, List<String> subWeapons,
-                      List<String> grenades, List<String> foods,
+                      List<String> grenades, List<String> foods, List<String> head, List<String> body, List<String> legs, List<String> foot,
                       Map<String, Map<String, String>> equipment, String select, BattleStatus battleStatus, boolean bloodSetting) {
         this.rank = rank;
         this.money = money;
@@ -24,6 +28,10 @@ public class PlayerData {
         this.subWeapons = subWeapons;
         this.grenades = grenades;
         this.foods = foods;
+        this.head = head;
+        this.body = body;
+        this.legs = legs;
+        this.foot = foot;
         this.equipment = equipment;
         this.select = select;
         this.battleStatus = battleStatus;
@@ -40,6 +48,14 @@ public class PlayerData {
                 return this.grenades;
             case "food":
                 return this.foods;
+            case "head":
+                return this.head;
+            case "body":
+                return this.body;
+            case "legs":
+                return this.legs;
+            case "foot":
+                return this.foot;
             default:
                 return null;
         }

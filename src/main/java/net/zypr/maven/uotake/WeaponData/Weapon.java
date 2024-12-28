@@ -13,7 +13,7 @@ public class Weapon {
 
 
     public static boolean isCategory(String category) {
-        return (Objects.equals(category, "main") || Objects.equals(category, "sub") || Objects.equals(category, "grenade") || Objects.equals(category, "food"));
+        return (Objects.equals(category, "main") || Objects.equals(category, "sub") || Objects.equals(category, "grenade") || Objects.equals(category, "food") || Objects.equals(category, "head") || Objects.equals(category, "body") || Objects.equals(category, "legs") || Objects.equals(category, "foot"));
     }
     public static int getAmount(String id, String category) {
         if (Uotake.config.isSet("weapon." + category + "." + id + ".amount")) {
@@ -53,7 +53,7 @@ public class Weapon {
 
 
     public static String getCategory (String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food");
+        List<String> exList = Arrays.asList("main", "sub", "grenade", "food", "");
         for (String s : exList) {
             if (Uotake.config.isSet("weapon." + s + "." + id)) {
                 return s;

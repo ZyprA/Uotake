@@ -49,7 +49,11 @@ public class PlayerDataManager {
             List<String> mainWeapons = playerfile.getStringList("weapons.main");
             List<String> subWeapons = playerfile.getStringList("weapons.sub");
             List<String> grenades = playerfile.getStringList("weapons.grenade");
-            List<String> foods = playerfile.getStringList("weapons.food");
+            List<String> foods = playerfile.getStringList("weapons.armor.food");
+            List<String> head = playerfile.getStringList("weapons.armor.head");
+            List<String> body = playerfile.getStringList("weapons.armor.body");
+            List<String> legs = playerfile.getStringList("weapons.armor.legs");
+            List<String> foot = playerfile.getStringList("weapons.armor.foot");
 
             // equipmentセクションの読み込み
             String select = playerfile.getString("equipment.select");
@@ -83,7 +87,7 @@ public class PlayerDataManager {
             boolean bloodSetting = playerfile.getBoolean("setting.blood");
 
             // プレイヤーデータを作成
-            PlayerData data = new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, equipment, select, battleStatus, bloodSetting);
+            PlayerData data = new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, head, body, legs, foot, equipment, select, battleStatus, bloodSetting);
             playerDataMap.put(uuid, data);
         }
     }
