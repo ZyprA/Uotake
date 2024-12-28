@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class mainmenu {
+public class MainMenu {
     public static Inventory get() {
         Inventory inventory = Bukkit.createInventory(new InvHolder(), 27, "§8§nNetwork メニュー");
         ItemStack item;

@@ -55,7 +55,7 @@ public class Weapon {
 
 
     public static String getCategory(String id) {
-        List<String> exList = Arrays.asList("main", "sub", "grenade", "food", "");
+        List<String> exList = Arrays.asList("main", "sub", "grenade", "food", "head", "body", "legs", "foot");
         for (String s : exList) {
             if (Uotake.config.isSet("weapon." + s + "." + id)) {
                 return s;
@@ -78,6 +78,14 @@ public class Weapon {
             return playerData.getGrenades().contains(id);
         } else if (Objects.equals(category, "food")) {
             return playerData.getFoods().contains(id);
+        } else if (Objects.equals(category, "head")) {
+            return playerData.getHead().contains(id);
+        } else if (Objects.equals(category, "body")) {
+            return playerData.getBody().contains(id);
+        } else if (Objects.equals(category, "legs")) {
+            return playerData.getLegs().contains(id);
+        } else if (Objects.equals(category, "foot")) {
+            return playerData.getFoot().contains(id);
         }
         return false;
     }

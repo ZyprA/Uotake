@@ -17,7 +17,7 @@ import java.util.List;
 
 import static net.zypr.maven.uotake.Uotake.getRoot;
 
-public class gameselect {
+public class GameSelector {
     public static Inventory get() {
         Inventory inventory = Bukkit.createInventory(new InvHolder(), 27, "§8§nゲーム選択メニュー - クリックで選択");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/serverstatus.yml"));

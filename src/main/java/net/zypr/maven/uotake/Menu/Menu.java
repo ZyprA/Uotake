@@ -1,9 +1,9 @@
 package net.zypr.maven.uotake.Menu;
 
-import net.zypr.maven.uotake.Menu.packs.equip;
-import net.zypr.maven.uotake.Menu.packs.equipeditor;
-import net.zypr.maven.uotake.Menu.packs.gameselect;
-import net.zypr.maven.uotake.Menu.packs.mainmenu;
+import net.zypr.maven.uotake.Menu.packs.Equip;
+import net.zypr.maven.uotake.Menu.packs.EquipEditor;
+import net.zypr.maven.uotake.Menu.packs.GameSelector;
+import net.zypr.maven.uotake.Menu.packs.MainMenu;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.WeaponData.Weapon;
 import net.zypr.maven.uotake.classes.InvLoader;
@@ -24,13 +24,13 @@ public class Menu {
     p.closeInventory();
     switch (id) {
         case "gameselect":
-            p.openInventory(gameselect.get());
+            p.openInventory(GameSelector.get());
             break;
         case "mainmenu":
-            p.openInventory(mainmenu.get());
+            p.openInventory(MainMenu.get());
             break;
         case "equipeditor":
-            p.openInventory(equipeditor.get(p));
+            p.openInventory(EquipEditor.get(p));
             break;
         default:
             if (id.startsWith("equip.")) {
@@ -46,7 +46,7 @@ public class Menu {
 
 private static void handleEquipMenu(Player p, String id) {
     String[] params = id.split("\\.");
-    p.openInventory(equip.get(params[1] + "." + params[2], p));
+    p.openInventory(Equip.get(params[1] + "." + params[2], p));
 }
 
 private static void handleShopMenu(Player p, String id) {

@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.List;
 import java.util.Objects;
 
-public class equip {
+public class Equip {
     public static Inventory get(String param, Player p) { //a.main
         String[] params = param.split("\\.");
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());

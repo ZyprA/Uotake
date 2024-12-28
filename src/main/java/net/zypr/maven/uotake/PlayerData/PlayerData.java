@@ -32,7 +32,7 @@ public class PlayerData {
         this.body = body;
         this.legs = legs;
         this.foot = foot;
-        this.equipment = equipment;
+        this.equipment = equipment; // 装備中のものを示す
         this.select = select;
         this.battleStatus = battleStatus;
         this.bloodSetting = bloodSetting;
@@ -108,6 +108,22 @@ public class PlayerData {
 
     public void setFoods(List<String> foods) {
         this.foods = foods;
+    }
+
+    public List<String> getHead() {
+        return head;
+    }
+
+    public List<String> getBody() {
+        return body;
+    }
+
+    public List<String> getLegs() {
+        return legs;
+    }
+
+    public List<String> getFoot() {
+        return foot;
     }
 
     public Map<String, Map<String, String>> getEquipment() {

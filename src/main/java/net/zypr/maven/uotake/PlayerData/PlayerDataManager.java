@@ -11,85 +11,20 @@ import java.io.IOException;
 import java.util.*;
 
 public class PlayerDataManager {
-    private final HashMap<UUID, PlayerData> playerDataMap = new HashMap<>();
+    private final Map<UUID, PlayerData> playerDataMap = new HashMap<>();
 
     public void loadPlayerData(Player player) {
         UUID uuid = player.getUniqueId();
-        File file = new File(Uotake.getRoot() + "/users/" + uuid + ".yml");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        FileConfiguration playerfile = YamlConfiguration.loadConfiguration(file);
-        List<String> contents = (List<String>) Uotake.config.getList("load_contents.contents");
-        if (contents != null) {
-            for (String index : contents) {
-                if (!playerfile.isSet(index)) {
-                    Object value = Uotake.config.get("load_contents.settings." + index);
-                    playerfile.set(index, value);
-                    player.sendMessage(index + "を追加しました。: " + value);
-                }
-            }
-        }
-        try {
-            playerfile.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File file = getPlayerDataFile(uuid);
+        createFileIfNotExists(file);
+
+        FileConfiguration playerFile = YamlConfiguration.loadConfiguration(file);
+        loadDefaultContents(playerFile, player);
+        saveFile(playerFile, file);
+
         if (file.exists()) {
             player.sendMessage("読み込みました");
-
-            // プレイヤーデータの読み込み
-            int rank = playerfile.getInt("user.rank");
-            int money = playerfile.getInt("user.money");
-
-            List<String> mainWeapons = playerfile.getStringList("weapons.main");
-            List<String> subWeapons = playerfile.getStringList("weapons.sub");
-            List<String> grenades = playerfile.getStringList("weapons.grenade");
-            List<String> foods = playerfile.getStringList("weapons.armor.food");
-            List<String> head = playerfile.getStringList("weapons.armor.head");
-            List<String> body = playerfile.getStringList("weapons.armor.body");
-            List<String> legs = playerfile.getStringList("weapons.armor.legs");
-            List<String> foot = playerfile.getStringList("weapons.armor.foot");
-
-            // equipmentセクションの読み込み
-            String select = playerfile.getString("equipment.select");
-
-            Map<String, Map<String, String>> equipment = new HashMap<>();
-            ConfigurationSection equipmentSection = playerfile.getConfigurationSection("equipment");
-
-            if (equipmentSection != null) {
-                for (String key : equipmentSection.getKeys(false)) {
-                    if (Objects.equals(key, "select")) {
-                        continue;
-                    }
-                    Map<String, Object> equipmentObjectMap = equipmentSection.getConfigurationSection(key).getValues(false);
-                    Map<String, String> equipmentStringMap = new HashMap<>();
-
-                    for (Map.Entry<String, Object> entry : equipmentObjectMap.entrySet()) {
-                        // オブジェクトを文字列に変換して Map に格納
-                        equipmentStringMap.put(entry.getKey(), entry.getValue().toString());
-                    }
-                    equipment.put(key, equipmentStringMap);
-                }
-            }
-
-            // battle_statusセクションの読み込み
-            BattleStatus battleStatus = new BattleStatus(0, 0, 0, 0, 0, 0);
-            battleStatus.setWins(playerfile.getInt("battle_status.wins"));
-            battleStatus.setLosses(playerfile.getInt("battle_status.losses"));
-            battleStatus.setDraws(playerfile.getInt("battle_status.draws"));
-            battleStatus.setKills(playerfile.getInt("battle_status.kills"));
-            battleStatus.setDeaths(playerfile.getInt("battle_status.deaths"));
-            battleStatus.setBonusPoints(playerfile.getInt("battle_status.bonuspoint"));
-
-            boolean bloodSetting = playerfile.getBoolean("setting.blood");
-
-            // プレイヤーデータを作成
-            PlayerData data = new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, head, body, legs, foot, equipment, select, battleStatus, bloodSetting);
+            PlayerData data = loadPlayerDataFromFile(playerFile);
             playerDataMap.put(uuid, data);
         }
     }
@@ -97,47 +32,12 @@ public class PlayerDataManager {
     public void savePlayerData(Player player) {
         UUID uuid = player.getUniqueId();
         PlayerData data = playerDataMap.get(uuid);
-        File file = new File(Uotake.getRoot() + "/users/" + uuid + ".yml");
+        File file = getPlayerDataFile(uuid);
+        createFileIfNotExists(file);
 
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        FileConfiguration playerfile = YamlConfiguration.loadConfiguration(file);
-        playerfile.set("user.rank", data.getRank());
-        playerfile.set("user.money", data.getMoney());
-        playerfile.set("weapons.main", data.getMainWeapons());
-        playerfile.set("weapons.sub", data.getSubWeapons());
-        playerfile.set("weapons.grenade", data.getGrenades());
-        playerfile.set("weapons.food", data.getFoods());
-
-        // equipmentの保存
-        playerfile.set("equipment.select", data.getSelect());
-        for (String key : data.getEquipment().keySet()) {
-            Map<String, String> equipment = data.getEquipment().get(key);
-            playerfile.createSection("equipment." + key, equipment);
-        }
-
-        // battle_statusの保存
-        BattleStatus battleStatus = data.getBattleStatus();
-        playerfile.set("battle_status.wins", battleStatus.getWins());
-        playerfile.set("battle_status.losses", battleStatus.getLosses());
-        playerfile.set("battle_status.draws", battleStatus.getDraws());
-        playerfile.set("battle_status.kills", battleStatus.getKills());
-        playerfile.set("battle_status.deaths", battleStatus.getDeaths());
-        playerfile.set("battle_status.bonuspoint", battleStatus.getBonusPoints());
-
-        playerfile.set("setting.blood", data.isBloodSetting());
-
-        try {
-            playerfile.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileConfiguration playerFile = YamlConfiguration.loadConfiguration(file);
+        savePlayerDataToFile(playerFile, data);
+        saveFile(playerFile, file);
     }
 
     public void removePlayerData(UUID uuid) {
@@ -148,5 +48,119 @@ public class PlayerDataManager {
         return playerDataMap.get(uniqueId);
     }
 
-    // 他のメソッド
+    private File getPlayerDataFile(UUID uuid) {
+        return new File(Uotake.getRoot() + "/users/" + uuid + ".yml");
+    }
+
+    private void createFileIfNotExists(File file) {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadDefaultContents(FileConfiguration playerFile, Player player) {
+        List<String> contents = (List<String>) Uotake.config.getList("load_contents.contents");
+        if (contents != null) {
+            for (String index : contents) {
+                if (!playerFile.isSet(index)) {
+                    Object value = Uotake.config.get("load_contents.settings." + index);
+                    playerFile.set(index, value);
+                    player.sendMessage(index + "を追加しました。: " + value);
+                }
+            }
+        }
+    }
+
+    private PlayerData loadPlayerDataFromFile(FileConfiguration playerFile) {
+        int rank = playerFile.getInt("user.rank");
+        int money = playerFile.getInt("user.money");
+
+        //　所持品
+        List<String> mainWeapons = playerFile.getStringList("weapons.main");
+        List<String> subWeapons = playerFile.getStringList("weapons.sub");
+        List<String> grenades = playerFile.getStringList("weapons.grenade");
+        List<String> foods = playerFile.getStringList("weapons.armor.food");
+        List<String> head = playerFile.getStringList("weapons.armor.head");
+        List<String> body = playerFile.getStringList("weapons.armor.body");
+        List<String> legs = playerFile.getStringList("weapons.armor.legs");
+        List<String> foot = playerFile.getStringList("weapons.armor.foot");
+
+        // 装備中のものを示す
+        String select = playerFile.getString("equipment.select");
+        Map<String, Map<String, String>> equipment = loadEquipment(playerFile);
+
+        BattleStatus battleStatus = loadBattleStatus(playerFile);
+        boolean bloodSetting = playerFile.getBoolean("setting.blood");
+
+        return new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, head, body, legs, foot, equipment, select, battleStatus, bloodSetting);
+    }
+
+    private Map<String, Map<String, String>> loadEquipment(FileConfiguration playerFile) {
+        Map<String, Map<String, String>> equipment = new HashMap<>();
+        ConfigurationSection equipmentSection = playerFile.getConfigurationSection("equipment");
+
+        if (equipmentSection != null) {
+            for (String key : equipmentSection.getKeys(false)) {
+                if (Objects.equals(key, "select")) {
+                    continue;
+                }
+                Map<String, Object> equipmentObjectMap = equipmentSection.getConfigurationSection(key).getValues(false);
+                Map<String, String> equipmentStringMap = new HashMap<>();
+
+                for (Map.Entry<String, Object> entry : equipmentObjectMap.entrySet()) {
+                    equipmentStringMap.put(entry.getKey(), entry.getValue().toString());
+                }
+                equipment.put(key, equipmentStringMap);
+            }
+        }
+        return equipment;
+    }
+
+    private BattleStatus loadBattleStatus(FileConfiguration playerFile) {
+        BattleStatus battleStatus = new BattleStatus(0, 0, 0, 0, 0, 0);
+        battleStatus.setWins(playerFile.getInt("battle_status.wins"));
+        battleStatus.setLosses(playerFile.getInt("battle_status.losses"));
+        battleStatus.setDraws(playerFile.getInt("battle_status.draws"));
+        battleStatus.setKills(playerFile.getInt("battle_status.kills"));
+        battleStatus.setDeaths(playerFile.getInt("battle_status.deaths"));
+        battleStatus.setBonusPoints(playerFile.getInt("battle_status.bonuspoint"));
+        return battleStatus;
+    }
+
+    private void savePlayerDataToFile(FileConfiguration playerFile, PlayerData data) {
+        playerFile.set("user.rank", data.getRank());
+        playerFile.set("user.money", data.getMoney());
+        playerFile.set("weapons.main", data.getMainWeapons());
+        playerFile.set("weapons.sub", data.getSubWeapons());
+        playerFile.set("weapons.grenade", data.getGrenades());
+        playerFile.set("weapons.food", data.getFoods());
+
+        playerFile.set("equipment.select", data.getSelect());
+        for (String key : data.getEquipment().keySet()) {
+            Map<String, String> equipment = data.getEquipment().get(key);
+            playerFile.createSection("equipment." + key, equipment);
+        }
+
+        BattleStatus battleStatus = data.getBattleStatus();
+        playerFile.set("battle_status.wins", battleStatus.getWins());
+        playerFile.set("battle_status.losses", battleStatus.getLosses());
+        playerFile.set("battle_status.draws", battleStatus.getDraws());
+        playerFile.set("battle_status.kills", battleStatus.getKills());
+        playerFile.set("battle_status.deaths", battleStatus.getDeaths());
+        playerFile.set("battle_status.bonuspoint", battleStatus.getBonusPoints());
+
+        playerFile.set("setting.blood", data.isBloodSetting());
+    }
+
+    private void saveFile(FileConfiguration playerFile, File file) {
+        try {
+            playerFile.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
