@@ -6,11 +6,12 @@ import java.util.UUID;
 public class CooldownManager {
 
     // プレイヤーごとのクールダウンを管理するHashMap
-    private static HashMap<UUID, Long> cooldowns = new HashMap<>();
+    private static final HashMap<UUID, Long> cooldowns = new HashMap<>();
 
     /**
      * プレイヤーのクールダウンがアクティブかどうかを確認するメソッド
-     * @param playerId プレイヤーのUUID
+     *
+     * @param playerId     プレイヤーのUUID
      * @param cooldownTime クールダウンの間隔（ミリ秒）
      * @return クールダウン中であればtrue、そうでなければfalse
      */
@@ -27,6 +28,7 @@ public class CooldownManager {
 
     /**
      * プレイヤーにクールダウンを設定するメソッド
+     *
      * @param playerId プレイヤーのUUID
      */
     public static void setCooldown(UUID playerId) {

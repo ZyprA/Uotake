@@ -15,14 +15,14 @@ import java.util.List;
 
 public class mainmenu {
     public static Inventory get() {
-        Inventory inventory = Bukkit.createInventory(new InvHolder(), 27 , "§8§nNetwork メニュー");
+        Inventory inventory = Bukkit.createInventory(new InvHolder(), 27, "§8§nNetwork メニュー");
         ItemStack item;
         String display;
         Material material;
         String action;
-        List<Integer> slots = (new ArrayList<>(Arrays.asList(2,4,6,12,14,17,26)));
+        List<Integer> slots = (new ArrayList<>(Arrays.asList(2, 4, 6, 12, 14, 17, 26)));
         for (Integer slot : slots) {
-            switch(slot) {
+            switch (slot) {
                 case 2:
                     material = Material.BRICK;
                     display = "§b武器選択§7>>メニューを開く";
@@ -71,7 +71,7 @@ public class mainmenu {
                 meta.setDisplayName(display);
             }
             item.setItemMeta(meta);
-            inventory.setItem(slot,item);
+            inventory.setItem(slot, item);
         }
 
         return inventory;

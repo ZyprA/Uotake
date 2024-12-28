@@ -1,4 +1,5 @@
 package net.zypr.maven.uotake.Others;
+
 import fr.mrmicky.fastboard.FastBoard;
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
@@ -11,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Scoreboard implements Listener {
-    private static FastBoard board;
     private static final Map<Player, FastBoard> boards = new HashMap<>();
     private static final int LOOP_TIME = 100; //5秒
+    private static FastBoard board;
 
     public static void deleteBoard(Player player) {
         FastBoard board = boards.remove(player);
@@ -21,6 +22,7 @@ public class Scoreboard implements Listener {
             board.delete();
         }
     }
+
     public void showScoreboard() {
         new BukkitRunnable() {
             @Override

@@ -15,6 +15,7 @@ public class Weapon {
     public static boolean isCategory(String category) {
         return (Objects.equals(category, "main") || Objects.equals(category, "sub") || Objects.equals(category, "grenade") || Objects.equals(category, "food") || Objects.equals(category, "head") || Objects.equals(category, "body") || Objects.equals(category, "legs") || Objects.equals(category, "foot"));
     }
+
     public static int getAmount(String id, String category) {
         if (Uotake.config.isSet("weapon." + category + "." + id + ".amount")) {
             return Uotake.config.getInt("weapon." + category + "." + id + ".amount");
@@ -44,15 +45,16 @@ public class Weapon {
         return 0;
     }
 
-    public static boolean ifExists (String id) {
+    public static boolean ifExists(String id) {
         return !(Objects.equals(getCategory(id), "null"));
     }
-    public static boolean ifExists (String id, String category) {
+
+    public static boolean ifExists(String id, String category) {
         return Uotake.config.isSet("weapon." + category + "." + id);
     }
 
 
-    public static String getCategory (String id) {
+    public static String getCategory(String id) {
         List<String> exList = Arrays.asList("main", "sub", "grenade", "food", "");
         for (String s : exList) {
             if (Uotake.config.isSet("weapon." + s + "." + id)) {
@@ -63,7 +65,9 @@ public class Weapon {
     }
 
     public static boolean ifPlayerHasWeapon(Player p, String id) {
-        if (!ifExists(id)) {return false;}
+        if (!ifExists(id)) {
+            return false;
+        }
         String category = getCategory(id);
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
         if (Objects.equals(category, "main")) {
@@ -79,7 +83,9 @@ public class Weapon {
     }
 
     public static Integer getCost(String id) {
-        if (!ifExists(id)) {return -1;}
+        if (!ifExists(id)) {
+            return -1;
+        }
         String category = getCategory(id);
         if (Uotake.config.contains("weapon." + category + "." + id + ".cost")) {
             return Uotake.config.getInt("weapon." + category + "." + id + ".cost");
@@ -87,8 +93,10 @@ public class Weapon {
         return -1;
     }
 
-    public static boolean giveWeapon (Player p, String id) {
-        if (!ifExists(id) || ifPlayerHasWeapon(p, id)) {return false;}
+    public static boolean giveWeapon(Player p, String id) {
+        if (!ifExists(id) || ifPlayerHasWeapon(p, id)) {
+            return false;
+        }
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
         String category = getCategory(id);
         if (Objects.equals(category, "main")) {
@@ -106,11 +114,15 @@ public class Weapon {
     //If weapon is not exist, return 3; If player has weapon already, return 2; If player has not enought money, return 1; If success, return 0; Something error happened, return 4;
     public static Integer buyWeapon(Player p, String id) {
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-        if (!ifExists(id)) {return 3;}
-        if (ifPlayerHasWeapon(p,id)) {return 2;}
+        if (!ifExists(id)) {
+            return 3;
+        }
+        if (ifPlayerHasWeapon(p, id)) {
+            return 2;
+        }
         Integer cost = getCost(id);
         if (playerData.getMoney() >= cost && cost != -1) {
-            if(giveWeapon(p,id)) {
+            if (giveWeapon(p, id)) {
                 playerData.setMoney(playerData.getMoney() - cost);
                 return 0;
             } else {

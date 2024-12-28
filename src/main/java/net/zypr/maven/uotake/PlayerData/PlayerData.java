@@ -10,10 +10,10 @@ public class PlayerData {
     private List<String> subWeapons;
     private List<String> grenades;
     private List<String> foods;
-    private List<String> head;
-    private List<String> body;
-    private List<String> legs;
-    private List<String> foot;
+    private final List<String> head;
+    private final List<String> body;
+    private final List<String> legs;
+    private final List<String> foot;
     private Map<String, Map<String, String>> equipment; // A, B, Armor
     private String select;
     private BattleStatus battleStatus;
@@ -60,6 +60,7 @@ public class PlayerData {
                 return null;
         }
     }
+
     // ゲッターとセッター
     public int getRank() {
         return rank;

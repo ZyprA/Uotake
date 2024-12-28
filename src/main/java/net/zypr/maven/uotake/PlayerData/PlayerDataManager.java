@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class PlayerDataManager {
-    private HashMap<UUID, PlayerData> playerDataMap = new HashMap<>();
+    private final HashMap<UUID, PlayerData> playerDataMap = new HashMap<>();
 
     public void loadPlayerData(Player player) {
         UUID uuid = player.getUniqueId();
@@ -63,7 +63,9 @@ public class PlayerDataManager {
 
             if (equipmentSection != null) {
                 for (String key : equipmentSection.getKeys(false)) {
-                    if (Objects.equals(key, "select")) {continue;}
+                    if (Objects.equals(key, "select")) {
+                        continue;
+                    }
                     Map<String, Object> equipmentObjectMap = equipmentSection.getConfigurationSection(key).getValues(false);
                     Map<String, String> equipmentStringMap = new HashMap<>();
 
@@ -76,7 +78,7 @@ public class PlayerDataManager {
             }
 
             // battle_statusセクションの読み込み
-            BattleStatus battleStatus = new BattleStatus(0,0,0,0,0,0);
+            BattleStatus battleStatus = new BattleStatus(0, 0, 0, 0, 0, 0);
             battleStatus.setWins(playerfile.getInt("battle_status.wins"));
             battleStatus.setLosses(playerfile.getInt("battle_status.losses"));
             battleStatus.setDraws(playerfile.getInt("battle_status.draws"));

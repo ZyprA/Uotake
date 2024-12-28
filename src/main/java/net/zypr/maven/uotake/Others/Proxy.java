@@ -17,9 +17,8 @@ public class Proxy {
             player.sendPluginMessage(Uotake.getPlugin(), "BungeeCord", b.toByteArray());
             b.close();
             out.close();
-        }
-        catch (Exception e) {
-            player.sendMessage(ChatColor.RED+"Error when trying to connect to "+server);
+        } catch (Exception e) {
+            player.sendMessage(ChatColor.RED + "Error when trying to connect to " + server);
         }
     }
 

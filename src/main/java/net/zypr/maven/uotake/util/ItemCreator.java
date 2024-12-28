@@ -14,7 +14,7 @@ public class ItemCreator {
     private byte data;
     private String name;
     private List<String> lore;
-    private Map<String,String> nbt;
+    private Map<String, String> nbt;
     private Integer cmd;
     private String action;
 
@@ -30,7 +30,7 @@ public class ItemCreator {
     }
 
     public ItemStack generate() {
-        ItemStack itemStack = new ItemStack(this.material,this.amount,this.data);
+        ItemStack itemStack = new ItemStack(this.material, this.amount, this.data);
         if (this.action != null) {
             NBTAPI.addNBT(itemStack, "action", this.action);
         }

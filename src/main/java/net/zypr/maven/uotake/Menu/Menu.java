@@ -31,10 +31,12 @@ public class Menu {
             p.openInventory(equipeditor.get(p));
         } else if (id.startsWith("equip.")) {
             String[] params = id.split("\\.");
-            p.openInventory(equip.get(params[1] + "." + params[2],p));
+            p.openInventory(equip.get(params[1] + "." + params[2], p));
         } else if (id.startsWith("shop.")) {
             String[] params = id.split("\\.");
-            if (params.length != 2) {return;}
+            if (params.length != 2) {
+                return;
+            }
             String title = String.valueOf(Uotake.config.get("display.shop." + params[1]));
             List<String> weapons = Uotake.weaponbytype.getWeapons(params[1]);
             List<ItemStack> itemStacks = new ArrayList<>();
@@ -44,7 +46,7 @@ public class Menu {
             } else if (Objects.equals(params[1], "hg")) {
                 category = "sub";
             }
-            for(String weapon : weapons) {
+            for (String weapon : weapons) {
                 ItemStack im = new ItemStack(Weapon.getMaterial(weapon, category));
                 NBTAPI.addNBT(im, "action", "buyweapon@" + weapon);
                 ItemMeta itemMeta = im.getItemMeta();
@@ -55,10 +57,10 @@ public class Menu {
                 im.setItemMeta(itemMeta);
                 itemStacks.add(im);
             }
-            Inventory inv = Bukkit.createInventory(new InvHolder(), (((weapons.size() - 1) / 9) + 1) * 9 ,"§8§l" + title);
+            Inventory inv = Bukkit.createInventory(new InvHolder(), (((weapons.size() - 1) / 9) + 1) * 9, "§8§l" + title);
             InvLoader.load(inv, itemStacks);
             p.openInventory(inv);
-        }else {
+        } else {
             p.sendMessage(ChatColor.RED + "メニュー情報が存在しません．管理者に問い合わせてください");
         }
     }

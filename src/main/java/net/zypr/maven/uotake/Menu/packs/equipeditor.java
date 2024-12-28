@@ -10,16 +10,19 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 
 public class equipeditor {
     public static Inventory get(Player p) {
-        Inventory inventory = Bukkit.createInventory(new InvHolder(), 54 , "§8装備 - 武器をクリックで選択画面表示");
+        Inventory inventory = Bukkit.createInventory(new InvHolder(), 54, "§8装備 - 武器をクリックで選択画面表示");
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
         String select = playerData.getSelect();
         String armbool = playerData.getEquipment().get("armor").get("boolean");
-        List<Integer> slots = (new ArrayList<>(Arrays.asList(0,1,3,5,6)));
+        List<Integer> slots = (new ArrayList<>(Arrays.asList(0, 1, 3, 5, 6)));
         ItemCreator creator = new ItemCreator();
         for (Integer slot : slots) {
             if (slot == 0 || slot == 1) { //装備セットA,B

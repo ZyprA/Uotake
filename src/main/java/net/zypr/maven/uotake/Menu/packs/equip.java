@@ -9,7 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 public class equip {
     public static Inventory get(String param, Player p) { //a.main
@@ -30,7 +31,7 @@ public class equip {
                     }
                 }
             }
-        } else if (params.length == 2 && Objects.equals(params[0], "armor") && (Objects.equals(params[1], "head") || Objects.equals(params[1], "body") || Objects.equals(params[1], "legs") || Objects.equals(params[1], "foot"))){
+        } else if (params.length == 2 && Objects.equals(params[0], "armor") && (Objects.equals(params[1], "head") || Objects.equals(params[1], "body") || Objects.equals(params[1], "legs") || Objects.equals(params[1], "foot"))) {
             List<String> weapons;
             if (Weapon.isCategory(params[1])) {
                 weapons = playerData.getWeapons(params[1]);
@@ -43,7 +44,7 @@ public class equip {
                     }
                 }
             }
-        } else  {
+        } else {
             inventory = Bukkit.createInventory(new InvHolder(), 9, "§8不明なメニュー: 管理者に問い合わせてください");
         }
         return inventory;

@@ -7,8 +7,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class ConfigUtil {
-    private File file;
-    private FileConfiguration config;
+    private final File file;
+    private final FileConfiguration config;
 
     public ConfigUtil(String path) {
         this.file = new File(Uotake.getRoot() + path);
@@ -19,7 +19,7 @@ public class ConfigUtil {
         try {
             this.config.save(this.file);
             return true;
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
