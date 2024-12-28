@@ -33,7 +33,7 @@ public class Weapon {
         return Material.getMaterial(Uotake.config.getString("weapon." + category + "." + id + ".item", "AIR"));
     }
 
-    public static Integer getCmd(String id, String category) {
+    public static int getCmd(String id, String category) {
         return Uotake.config.getInt("weapon." + category + "." + id + ".cmd", 0);
     }
 
@@ -61,12 +61,27 @@ public class Weapon {
         return getPlayerWeaponsByCategory(playerData, category).contains(id);
     }
 
-    public static Integer getCost(String id) {
+    public static int getCost(String id) {
         if (!ifExists(id)) {
             return -1;
         }
         String category = getCategory(id);
         return Uotake.config.getInt("weapon." + category + "." + id + ".cost", -1);
+    }
+
+    public static int getTier(String id) {
+        String category = getCategory(id);
+        if (!ifExists(id, category)) {
+            return 1;
+        }
+        return Uotake.config.getInt("weapon." + category + "." + id + ".tier", -1);
+    }
+
+    public static int getTier(String id, String category) {
+        if (!ifExists(id, category)) {
+            return 1;
+        }
+        return Uotake.config.getInt("weapon." + category + "." + id + ".tier", -1);
     }
 
     public static boolean giveWeapon(Player p, String id) {
@@ -78,26 +93,53 @@ public class Weapon {
         getPlayerWeaponsByCategory(playerData, category).add(id);
         return true;
     }
+    
+    public static String getType(String id) {
+        return Uotake.config.getString("weapon." + getCategory(id) + "." + id + ".type");
+    }
 
-    public static Integer buyWeapon(Player p, String id) {
-        PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
-        if (!ifExists(id)) {
-            return 3;
-        }
-        if (ifPlayerHasWeapon(p, id)) {
-            return 2;
-        }
-        Integer cost = getCost(id);
-        if (playerData.getMoney() >= cost && cost != -1) {
-            if (giveWeapon(p, id)) {
-                playerData.setMoney(playerData.getMoney() - cost);
-                return 0;
-            } else {
-                return 4;
+    public static boolean ifPlayerIsAbleToBuyWeaponByTier(Player p, String id) {
+        int tier = getTier(id);
+        String type = getType(id);
+        for (int i = 1; i < tier; i++) {
+            List<String> weapons = Uotake.weaponbytype.getWeapons(type);
+            for (String weapon : weapons) {
+                if (getTier(weapon) == i && !ifPlayerHasWeapon(p, weapon)) {
+                    return false;
+                }
             }
         }
-        return 1;
+        return true;
     }
+
+    public static int buyWeapon(Player p, String id) {
+    PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
+    if (!ifExists(id)) {
+        return 3;
+    }
+    if (ifPlayerHasWeapon(p, id)) {
+        return 2;
+    }
+    int tier = getTier(id);
+    String type = getType(id);
+
+    // Check if all previous tier weapons of the same category are unlocked
+   if (!ifPlayerIsAbleToBuyWeaponByTier(p, id)) {
+        return 5;
+    }
+
+    int cost = getCost(id);
+    if (playerData.getMoney() >= cost && cost != -1) {
+        if (giveWeapon(p, id)) {
+            playerData.setMoney(playerData.getMoney() - cost);
+            return 0;
+        } else {
+            return 4;
+        }
+    }
+    return 1;
+}
+
 
     private static List<String> getPlayerWeaponsByCategory(PlayerData playerData, String category) {
         switch (category) {

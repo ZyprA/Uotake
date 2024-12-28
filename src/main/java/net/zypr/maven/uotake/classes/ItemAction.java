@@ -49,6 +49,9 @@ public class ItemAction {
                             p.sendMessage("§c武器のデータが存在しません。管理者に問い合わせてください。");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                             break;
+                        case 5:
+                            p.sendMessage("§c前のTierの武器を開放してください。");
+                            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                         default:
                             p.sendMessage("§c予期しないエラーが発生しました。管理者に問い合わせてください。");
                             p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
@@ -89,6 +92,14 @@ public class ItemAction {
                                 String weapon = settingParams[3];
                                 if(Weapon.ifExists(weapon,category)) {
                                     playerData.getEquipment().get(selector).put(category,weapon);
+                                    Menu.open(p,"equipeditor");
+                                    p.playSound(p,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR,1f,1f);
+                                }
+                            } else if (Objects.equals(selector, "armor")) {
+                                String category = settingParams[2];
+                                String armor = settingParams[3];
+                                if(Weapon.ifExists(armor,category)) {
+                                    playerData.getEquipment().get("armor").put(category,armor);
                                     Menu.open(p,"equipeditor");
                                     p.playSound(p,Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR,1f,1f);
                                 }

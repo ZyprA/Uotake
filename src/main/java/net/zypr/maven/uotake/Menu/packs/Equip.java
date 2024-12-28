@@ -49,7 +49,7 @@ private static Inventory createWeaponInventory(PlayerData playerData, String cat
         if (Weapon.ifExists(weapon)) {
             inventory.setItem(slot, creator.setMaterial(Weapon.getMaterial(weapon, category))
                     .setCmd(Weapon.getCmd(weapon, category))
-                    .setName(weapon)
+                    .setName(Weapon.getName(weapon, category))
                     .setAction("setting@select." + param + "." + category + "." + weapon)
                     .setAmount(Weapon.getAmount(weapon, category))
                     .setLore(Weapon.getDescription(weapon, category))

@@ -15,22 +15,22 @@ public class NPCClick implements Listener {
             NPC npc = CitizensAPI.getNPCRegistry().getNPC(event.getRightClicked());
             switch(npc.getFullName()){
                 case "アサルトライフル":
-                    Menu.open(event.getPlayer(),"shop.ar");
+                    Menu.open(event.getPlayer(),"shop.main.ar");
                     break;
                 case "ショットガン":
-                    Menu.open(event.getPlayer(),"shop.sg");
+                    Menu.open(event.getPlayer(),"shop.main.sg");
                     break;
                 case "サブマシンガン":
-                    Menu.open(event.getPlayer(),"shop.smg");
+                    Menu.open(event.getPlayer(),"shop.main.smg");
                     break;
                 case "スナイパーライフル":
-                    Menu.open(event.getPlayer(),"shop.sr");
+                    Menu.open(event.getPlayer(),"shop.main.sr");
                     break;
                 case "ロケットランチャー":
-                    Menu.open(event.getPlayer(),"shop.rl");
+                    Menu.open(event.getPlayer(),"shop.main.rl");
                     break;
                 case "ハンドガン":
-                    Menu.open(event.getPlayer(),"shop.hg");
+                    Menu.open(event.getPlayer(),"shop.sub.hg");
                     break;
             }
         }
