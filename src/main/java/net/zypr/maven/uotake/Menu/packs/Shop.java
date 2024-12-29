@@ -1,7 +1,9 @@
 package net.zypr.maven.uotake.Menu.packs;
 
+import net.zypr.maven.uotake.Menu.MenuName;
 import net.zypr.maven.uotake.Uotake;
-import net.zypr.maven.uotake.WeaponData.Weapon;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.Weapon;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponType;
 import net.zypr.maven.uotake.classes.InvLoader;
 import net.zypr.maven.uotake.util.InvHolder;
 import net.zypr.maven.uotake.util.ItemCreator;
@@ -15,42 +17,63 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Shop {
-    public static Inventory get(String param, Player p) {
-        String[] params = param.split("\\.");
+    public static Inventory get(MenuName type, Player p) {
 
-        Inventory inventory = null;
+        String title = getTitle(type.getName());
+        List<Weapon> weapons = getWeapons(WeaponType.valueOf(type.getName().toUpperCase()));
 
-        if (params.length != 3) {
-            inventory = Bukkit.createInventory(new InvHolder(), 9, "§8不明なメニュー: 管理者に問い合わせてください");
-            return inventory;
-        }
+        weapons.sort(Comparator.comparing(Weapon::getTier));
+        List<ItemStack> itemStacks = createItemStacks(weapons, p);
 
-        String title = String.valueOf(Uotake.config.get("display.shop." + params[2]));
-        List<String> weapons = Uotake.weaponbytype.getWeapons(params[2]);
+        return createInventory(title, itemStacks);
+    }
+
+    private static String getTitle(String param) {
+        return String.valueOf(Uotake.config.get("display.shop." + param));
+    }
+
+    private static List<Weapon> getWeapons(WeaponType type) {
+        return Uotake.weaponLoader.getWeaponsByType(type);
+    }
+
+    private static List<ItemStack> createItemStacks(List<Weapon> weapons, Player p) {
         List<ItemStack> itemStacks = new ArrayList<>();
-        String category = params[1];
         ItemCreator creator = new ItemCreator();
 
-        weapons.sort(Comparator.comparingInt(weapon -> Weapon.getTier(weapon, category)));
 
-        for (String weapon : weapons) {
-            List<String> description = new ArrayList<>();
-            if (Weapon.ifPlayerHasWeapon(p, weapon)) {
-                description.add("§a<購入済み>");
-            } else if (!Weapon.ifPlayerIsAbleToBuyWeaponByTier(p, weapon)) {
-                description.add("§c<要Tier解放>");
-            }
-            int Tier = Weapon.getTier(weapon, category);
 
-            description.add("§3§lTier" + Tier + " / $" + Weapon.getCost(weapon));
-            description.addAll(Weapon.getDescription(weapon, category));
-
-            itemStacks.add(creator.setMaterial(Weapon.getMaterial(weapon, category)).setCmd(Weapon.getCmd(weapon, category)).setName("§a§l" + weapon + "§7 - " + "§6Tier" + Tier).setAction("buyweapon@" + weapon).setLore(description).generate());
+        for (Weapon weapon : weapons) {
+            List<String> description = createDescription(weapon, p);
+            itemStacks.add(createItemStack(creator, weapon, description));
         }
 
-        inventory = Bukkit.createInventory(new InvHolder(), (((weapons.size() - 1) / 9) + 1) * 9, "§8§l" + title);
-        InvLoader.load(inventory, itemStacks);
+        return itemStacks;
+    }
 
+    private static List<String> createDescription(Weapon weapon, Player p) {
+        List<String> description = new ArrayList<>();
+        if (weapon.ifPlayerHas(p)) {
+            description.add("§a<購入済み>");
+        } else if (!weapon.ifPlayerIsAbleToBuyByTier(p)) {
+            description.add("§c<要Tier解放>");
+        }
+        description.add("§3§lTier" + weapon.getTier() + " / $" + weapon.getCost());
+        description.addAll(weapon.getDescription());
+        return description;
+    }
+
+    private static ItemStack createItemStack(ItemCreator creator, Weapon weapon, List<String> description) {
+        return creator.setMaterial(weapon.getMaterial())
+                .setCmd(weapon.getCmd())
+                .setName("§a§l" + weapon.getId() + "§7 - " + "§6Tier" + weapon.getTier())
+                .setAction("buyweapon@" + weapon.getId())
+                .setLore(description)
+                .generate();
+    }
+
+    private static Inventory createInventory(String title, List<ItemStack> itemStacks) {
+        Inventory inventory = Bukkit.createInventory(new InvHolder(), (((itemStacks.size() - 1) / 9) + 1) * 9, "§8§l" + title);
+        InvLoader.load(inventory, itemStacks);
         return inventory;
     }
 }

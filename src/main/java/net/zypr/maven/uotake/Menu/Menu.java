@@ -5,33 +5,31 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Menu {
-    public static void open(Player p, String id) {
+
+    public static void open(Player p, MenuName type) {
     p.closeInventory();
-    switch (id) {
-        case "gameselect":
+    switch (type) {
+        case GAMES_SELECT:
             p.openInventory(GameSelector.get());
             break;
-        case "mainmenu":
+        case MAIN_MENU:
             p.openInventory(MainMenu.get());
             break;
-        case "equipeditor":
+        case EQUIP_EDITOR:
             p.openInventory(EquipEditor.get(p));
             break;
+        case SHOP_AR:
+        case SHOP_HG:
+        case SHOP_RL:
+        case SHOP_SG:
+        case SHOP_SMG:
+        case SHOP_SR:
+            p.openInventory(Shop.get(type, p));
+            break;
         default:
-            if (id.startsWith("equip.")) {
-                handleEquipMenu(p, id);
-            } else if (id.startsWith("shop.")) {
-                p.openInventory(Shop.get(id, p));
-            } else {
-                p.sendMessage(ChatColor.RED + "メニュー情報が存在しません．管理者に問い合わせてください");
-            }
+            p.sendMessage(ChatColor.RED + "メニュー情報が存在しません．管理者に問い合わせてください");
             break;
     }
-}
-
-private static void handleEquipMenu(Player p, String id) {
-    String[] params = id.split("\\.");
-    p.openInventory(Equip.get(params[1] + "." + params[2], p));
 }
 
 }

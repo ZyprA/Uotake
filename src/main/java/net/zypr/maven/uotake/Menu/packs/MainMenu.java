@@ -26,7 +26,7 @@ public class MainMenu {
                 case 2:
                     material = Material.BRICK;
                     display = "§b武器選択§7>>メニューを開く";
-                    action = "OpenMenu@equipeditor/Sound@block.chest.open,1,1";
+                    action = "OpenMenu@equip_editor/Sound@block.chest.open,1,1";
                     break;
                 case 4:
                     material = Material.WRITABLE_BOOK;
@@ -36,12 +36,12 @@ public class MainMenu {
                 case 6:
                     material = Material.COMPARATOR;
                     display = "§b設定§7>>メニューを開く";
-                    action = "OpenMenu@usersetting/Sound@block.note_block.hat,1,1";
+                    action = "OpenMenu@user_setting/Sound@block.note_block.hat,1,1";
                     break;
                 case 12:
                     material = Material.COMPASS;
                     display = "§eゲーム選択メニュー§7>>メニューを開く";
-                    action = "OpenMenu@gameselect/Sound@block.note_block.hat,1,1";
+                    action = "OpenMenu@games_select/Sound@block.note_block.hat,1,1";
                     break;
                 case 14:
                     material = Material.CLOCK;

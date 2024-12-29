@@ -1,27 +1,34 @@
 package net.zypr.maven.uotake.PlayerData;
 
+import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
+import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.Weapon;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponCategory;
+
 import java.util.List;
 import java.util.Map;
 
 public class PlayerData {
     private int rank;
     private int money;
-    private List<String> mainWeapons;
-    private List<String> subWeapons;
-    private List<String> grenades;
-    private List<String> foods;
-    private final List<String> head;
-    private final List<String> body;
-    private final List<String> legs;
-    private final List<String> foot;
-    private Map<String, Map<String, String>> equipment; // A, B, Armor
+    private List<Weapon> mainWeapons;
+    private List<Weapon> subWeapons;
+    private List<Weapon> grenades;
+    private List<Weapon> foods;
+    private final List<Armor> head;
+    private final List<Armor> body;
+    private final List<Armor> legs;
+    private final List<Armor> foot;
+    private Map<String, Map<WeaponCategory, Weapon>> equipment; // A, B
+    private Map<ArmorType, Armor> armor;
     private String select;
+    private Boolean armorboolean;
     private BattleStatus battleStatus;
     private boolean bloodSetting;
 
-    public PlayerData(int rank, int money, List<String> mainWeapons, List<String> subWeapons,
-                      List<String> grenades, List<String> foods, List<String> head, List<String> body, List<String> legs, List<String> foot,
-                      Map<String, Map<String, String>> equipment, String select, BattleStatus battleStatus, boolean bloodSetting) {
+    public PlayerData(int rank, int money, List<Weapon> mainWeapons, List<Weapon> subWeapons,
+                      List<Weapon> grenades, List<Weapon> foods, List<Armor> head, List<Armor> body, List<Armor> legs, List<Armor> foot,
+                      Map<String, Map<WeaponCategory, Weapon>> equipment, Map<ArmorType, Armor> armor, String select, Boolean armorboolean, BattleStatus battleStatus, boolean bloodSetting) {
         this.rank = rank;
         this.money = money;
         this.mainWeapons = mainWeapons;
@@ -33,29 +40,23 @@ public class PlayerData {
         this.legs = legs;
         this.foot = foot;
         this.equipment = equipment; // 装備中のものを示す
+        this.armor = armor;
+        this.armorboolean = armorboolean;
         this.select = select;
         this.battleStatus = battleStatus;
         this.bloodSetting = bloodSetting;
     }
 
-    public List<String> getWeapons(String category) {
+    public List<Weapon> getWeapons(WeaponCategory category) {
         switch (category) {
-            case "main":
+            case MAIN:
                 return this.mainWeapons;
-            case "sub":
+            case SUB:
                 return this.subWeapons;
-            case "grenade":
+            case GRENADE:
                 return this.grenades;
-            case "food":
+            case FOOD:
                 return this.foods;
-            case "head":
-                return this.head;
-            case "body":
-                return this.body;
-            case "legs":
-                return this.legs;
-            case "foot":
-                return this.foot;
             default:
                 return null;
         }
@@ -78,59 +79,59 @@ public class PlayerData {
         this.money = money;
     }
 
-    public List<String> getMainWeapons() {
+    public List<Weapon> getMainWeapons() {
         return mainWeapons;
     }
 
-    public void setMainWeapons(List<String> mainWeapons) {
+    public void setMainWeapons(List<Weapon> mainWeapons) {
         this.mainWeapons = mainWeapons;
     }
 
-    public List<String> getSubWeapons() {
+    public List<Weapon> getSubWeapons() {
         return subWeapons;
     }
 
-    public void setSubWeapons(List<String> subWeapons) {
+    public void setSubWeapons(List<Weapon> subWeapons) {
         this.subWeapons = subWeapons;
     }
 
-    public List<String> getGrenades() {
+    public List<Weapon> getGrenades() {
         return grenades;
     }
 
-    public void setGrenades(List<String> grenades) {
+    public void setGrenades(List<Weapon> grenades) {
         this.grenades = grenades;
     }
 
-    public List<String> getFoods() {
+    public List<Weapon> getFoods() {
         return foods;
     }
 
-    public void setFoods(List<String> foods) {
+    public void setFoods(List<Weapon> foods) {
         this.foods = foods;
     }
 
-    public List<String> getHead() {
+    public List<Armor> getHead() {
         return head;
     }
 
-    public List<String> getBody() {
+    public List<Armor> getBody() {
         return body;
     }
 
-    public List<String> getLegs() {
+    public List<Armor> getLegs() {
         return legs;
     }
 
-    public List<String> getFoot() {
+    public List<Armor> getFoot() {
         return foot;
     }
 
-    public Map<String, Map<String, String>> getEquipment() {
+    public Map<String, Map<WeaponCategory, Weapon>> getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(Map<String, Map<String, String>> equipment) {
+    public void setEquipment(Map<String, Map<WeaponCategory, Weapon>> equipment) {
         this.equipment = equipment;
     }
 
@@ -140,6 +141,14 @@ public class PlayerData {
 
     public void setSelect(String select) {
         this.select = select;
+    }
+
+    public Boolean getArmorBoolean() {
+        return armorboolean;
+    }
+
+    public void setArmorBoolean(Boolean armorboolean) {
+        this.armorboolean = armorboolean;
     }
 
     public BattleStatus getBattleStatus() {
@@ -156,5 +165,13 @@ public class PlayerData {
 
     public void setBloodSetting(boolean bloodSetting) {
         this.bloodSetting = bloodSetting;
+    }
+
+    public Map<ArmorType, Armor> getArmor() {
+        return armor;
+    }
+
+    public void setArmor(Map<ArmorType, Armor> armor) {
+        this.armor = armor;
     }
 }

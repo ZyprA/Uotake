@@ -1,9 +1,10 @@
 package net.zypr.maven.uotake;
 
+import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorLoader;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponLoader;
 import net.zypr.maven.uotake.Others.CommandRegister;
 import net.zypr.maven.uotake.Others.Scoreboard;
 import net.zypr.maven.uotake.PlayerData.PlayerDataManager;
-import net.zypr.maven.uotake.WeaponData.WeaponByType;
 import net.zypr.maven.uotake.events.*;
 import net.zypr.maven.uotake.util.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -21,7 +22,8 @@ public class Uotake extends JavaPlugin {
     public static FileConfiguration inventory;
     public static ConfigUtil variable;
     public static PlayerDataManager playerDataManager;
-    public static WeaponByType weaponbytype;
+    public static WeaponLoader weaponLoader;
+    public static ArmorLoader armorLoader;
     private static Plugin plugin;
 
     public static String getRoot() {
@@ -52,7 +54,12 @@ public class Uotake extends JavaPlugin {
         inventory = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/lobby/inventory.yml"));
         variable = new ConfigUtil("/setting/lobby/variable.yml");
         playerDataManager = new PlayerDataManager();
-        weaponbytype = new WeaponByType();
+        weaponLoader = new WeaponLoader(config);
+        weaponLoader.loadWeapons();
+
+        armorLoader = new ArmorLoader(config);
+        armorLoader.loadArmors();
+
         new Scoreboard().showScoreboard();
     }
 
