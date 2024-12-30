@@ -2,6 +2,7 @@ package net.zypr.maven.uotake.classes;
 
 import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
 import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
+import net.zypr.maven.uotake.EquipmentData.WeaponData.Result;
 import net.zypr.maven.uotake.Menu.Menu;
 import net.zypr.maven.uotake.Menu.MenuName;
 import net.zypr.maven.uotake.Others.Proxy;
@@ -75,25 +76,21 @@ public class ItemAction {
     }
 
     private static void handleBuyWeaponAction(Player p, Weapon weapon) {
-       int buy = weapon.buy(p);
+       Weapon.Result buy = weapon.buy(p);
         switch (buy) {
-            case 0:
+            case SUCCESS:
                 p.sendMessage("§a購入成功。");
                 p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
                 break;
-            case 1:
+            case NOT_ENOUGH_MONEY:
                 p.sendMessage("§c所持金が不足しているため購入できません。");
                 p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                 break;
-            case 2:
+            case ALREADY_HAVE:
                 p.sendMessage("§cすでに所持しているため購入できません。");
                 p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                 break;
-            case 3:
-                p.sendMessage("§c武器のデータが存在しません。管理者に問い合わせてください。");
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
-                break;
-            case 5:
+            case NOT_ENOUGH_TIER:
                 p.sendMessage("§c前のTierの武器を開放してください。");
                 p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
                 break;

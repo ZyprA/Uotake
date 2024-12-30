@@ -66,7 +66,7 @@ public class Shop {
         return creator.setMaterial(weapon.getMaterial())
                 .setCmd(weapon.getCmd())
                 .setName("§a§l" + weapon.getId() + "§7 - " + "§6Tier" + weapon.getTier())
-                .setAction("buyweapon@" + weapon.getId())
+                .setAction("buyweapon@" + weapon.getId() + "/OpenMenu@shop_" + weapon.getType().getName())
                 .setLore(description)
                 .generate();
     }

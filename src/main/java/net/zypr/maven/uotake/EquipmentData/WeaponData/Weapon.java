@@ -132,20 +132,39 @@ public class Weapon {
                 .allMatch(weapon -> weapon.ifPlayerHas(p));
     }
 
-    public int buy(Player p) {
+    public Result buy(Player p) {
         if (ifPlayerHas(p)) {
-            return 1;
+            return Result.ALREADY_HAVE;
         }
         if (!ifPlayerIsAbleToBuyByTier(p)) {
-            return 2;
+            return Result.NOT_ENOUGH_TIER;
         }
         PlayerData playerData = playerDataManager.getPlayerData(p.getUniqueId());
         if (playerData.getMoney() >= this.getCost()) {
             playerData.getWeapons(this.category).add(this);
             playerData.setMoney(playerData.getMoney() - this.getCost());
-            return 0;
+            return Result.SUCCESS;
         }
-        return 3;
+        return Result.NOT_ENOUGH_MONEY;
+    }
+
+    public enum Result {
+
+        SUCCESS("§a購入に成功しました"),
+        ALREADY_HAVE("§c既に所持しています"),
+        NOT_ENOUGH_MONEY("§cお金が足りません"),
+        NOT_ENOUGH_TIER("§c前のTierの武器を全開放してください"),
+        ;
+
+        private final String message;
+
+        Result(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 
 }
