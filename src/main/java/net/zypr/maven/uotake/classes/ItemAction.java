@@ -26,10 +26,6 @@ public class ItemAction {
         PlayerData playerData = Uotake.playerDataManager.getPlayerData(p.getUniqueId());
         for (String param : params) {
             String[] args = param.split("@");
-            if (args.length < 2) {
-                p.sendMessage("§c無効なアクション: 管理者に問い合わせてください");
-                return;
-            }
             handleAction(p, playerData, args);
         }
     }
