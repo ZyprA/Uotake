@@ -2,10 +2,11 @@ package net.zypr.maven.uotake.PlayerData;
 
 import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
 import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
+import net.zypr.maven.uotake.EquipmentData.SkillData.Skill;
+import net.zypr.maven.uotake.EquipmentData.SkillData.SkillSet;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.EquipmentData.WeaponData.Weapon;
 import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponCategory;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,8 +17,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.zypr.maven.uotake.Uotake.armorLoader;
-import static net.zypr.maven.uotake.Uotake.weaponLoader;
+import static net.zypr.maven.uotake.Uotake.*;
 
 public class PlayerDataManager {
     private final Map<UUID, PlayerData> playerDataMap = new HashMap<>();
@@ -97,6 +97,7 @@ public class PlayerDataManager {
         List<Armor> body = getArmorFromConfig(playerFile, "armor.body");
         List<Armor> legs = getArmorFromConfig(playerFile, "armor.legs");
         List<Armor> foot = getArmorFromConfig(playerFile, "armor.foot");
+        List<Skill> skills = getSkillsFromConfig(playerFile, "skills");
 
         // 装備中のものを示す
         String select = playerFile.getString("equipment.select");
@@ -104,11 +105,27 @@ public class PlayerDataManager {
 
         Map<String, Map<WeaponCategory, Weapon>> equipWeapons = loadEquipWeapons(playerFile);
         Map<ArmorType, Armor> equipArmors = loadEquipArmors(playerFile);
+        Map<SkillSet, Skill> equipSkills = loadEquipSkills(playerFile);
 
         BattleStatus battleStatus = loadBattleStatus(playerFile);
         boolean bloodSetting = playerFile.getBoolean("setting.blood");
 
-        return new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, head, body, legs, foot, equipWeapons, equipArmors, select, armorboolean, battleStatus, bloodSetting);
+        return new PlayerData(rank, money, mainWeapons, subWeapons, grenades, foods, head, body, legs, foot, equipWeapons, equipArmors, select, armorboolean, equipSkills, skills, battleStatus, bloodSetting);
+    }
+
+    private Map<SkillSet, Skill> loadEquipSkills(FileConfiguration playerFile) {
+        Map<SkillSet, Skill> equipment = new HashMap<>();
+        ConfigurationSection equipmentSection = playerFile.getConfigurationSection("equipment.skillset");
+
+        if (equipmentSection != null) {
+            for (String key : equipmentSection.getKeys(false)) {
+                Skill skill = skillLoader.getSkillById(equipmentSection.getString(key));
+                if (skill != null) {
+                    equipment.put(SkillSet.valueOf(key.toUpperCase()), skill);
+                }
+            }
+        }
+        return equipment;
     }
 
     private BattleStatus loadBattleStatus(FileConfiguration playerFile) {
@@ -183,6 +200,18 @@ public class PlayerDataManager {
             }
         }
         return weapons;
+    }
+
+    private List<Skill> getSkillsFromConfig(FileConfiguration playerFile, String path) {
+        List<String> skillIds = playerFile.getStringList(path);
+        List<Skill> skills = new ArrayList<>();
+        for (String skillId : skillIds) {
+            Skill skill = skillLoader.getSkillById(skillId); // Assuming a `skillLoader` exists to fetch Skill by name
+            if (skill != null) {
+                skills.add(skill);
+            }
+        }
+        return skills;
     }
 
     private Map<String, Map<WeaponCategory, Weapon>> loadEquipWeapons(FileConfiguration playerFile) {

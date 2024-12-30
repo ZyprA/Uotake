@@ -1,6 +1,7 @@
 package net.zypr.maven.uotake;
 
 import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorLoader;
+import net.zypr.maven.uotake.EquipmentData.SkillData.SkillLoader;
 import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponLoader;
 import net.zypr.maven.uotake.Others.CommandRegister;
 import net.zypr.maven.uotake.Others.Scoreboard;
@@ -24,6 +25,7 @@ public class Uotake extends JavaPlugin {
     public static PlayerDataManager playerDataManager;
     public static WeaponLoader weaponLoader;
     public static ArmorLoader armorLoader;
+    public static SkillLoader skillLoader;
     private static Plugin plugin;
 
     public static String getRoot() {
@@ -59,6 +61,9 @@ public class Uotake extends JavaPlugin {
 
         armorLoader = new ArmorLoader(config);
         armorLoader.loadArmors();
+
+        skillLoader = new SkillLoader(config);
+        skillLoader.loadSkills();
 
         new Scoreboard().showScoreboard();
     }

@@ -2,6 +2,8 @@ package net.zypr.maven.uotake.PlayerData;
 
 import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
 import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
+import net.zypr.maven.uotake.EquipmentData.SkillData.Skill;
+import net.zypr.maven.uotake.EquipmentData.SkillData.SkillSet;
 import net.zypr.maven.uotake.EquipmentData.WeaponData.Weapon;
 import net.zypr.maven.uotake.EquipmentData.WeaponData.WeaponCategory;
 
@@ -23,12 +25,16 @@ public class PlayerData {
     private Map<ArmorType, Armor> armor;
     private String select;
     private Boolean armorboolean;
+
+    private Map<SkillSet, Skill> skillsets;
+    private List<Skill> skills;
+
     private BattleStatus battleStatus;
     private boolean bloodSetting;
 
     public PlayerData(int rank, int money, List<Weapon> mainWeapons, List<Weapon> subWeapons,
                       List<Weapon> grenades, List<Weapon> foods, List<Armor> head, List<Armor> body, List<Armor> legs, List<Armor> foot,
-                      Map<String, Map<WeaponCategory, Weapon>> equipment, Map<ArmorType, Armor> armor, String select, Boolean armorboolean, BattleStatus battleStatus, boolean bloodSetting) {
+                      Map<String, Map<WeaponCategory, Weapon>> equipment, Map<ArmorType, Armor> armor, String select, Boolean armorboolean, Map<SkillSet,Skill> skillsets, List<Skill> skills, BattleStatus battleStatus, boolean bloodSetting) {
         this.rank = rank;
         this.money = money;
         this.mainWeapons = mainWeapons;
@@ -43,23 +49,20 @@ public class PlayerData {
         this.armor = armor;
         this.armorboolean = armorboolean;
         this.select = select;
+        this.skillsets = skillsets;
+        this.skills = skills;
         this.battleStatus = battleStatus;
         this.bloodSetting = bloodSetting;
     }
 
     public List<Weapon> getWeapons(WeaponCategory category) {
-        switch (category) {
-            case MAIN:
-                return this.mainWeapons;
-            case SUB:
-                return this.subWeapons;
-            case GRENADE:
-                return this.grenades;
-            case FOOD:
-                return this.foods;
-            default:
-                return null;
-        }
+        return switch (category) {
+            case MAIN -> this.mainWeapons;
+            case SUB -> this.subWeapons;
+            case GRENADE -> this.grenades;
+            case FOOD -> this.foods;
+            default -> null;
+        };
     }
 
     // ゲッターとセッター
@@ -173,5 +176,21 @@ public class PlayerData {
 
     public void setArmor(Map<ArmorType, Armor> armor) {
         this.armor = armor;
+    }
+
+    public Map<SkillSet, Skill> getSkillsets() {
+        return skillsets;
+    }
+
+    public void setSkillsets(Map<SkillSet, Skill> skillsets) {
+        this.skillsets = skillsets;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
     }
 }

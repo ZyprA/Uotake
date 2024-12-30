@@ -1,6 +1,9 @@
 package net.zypr.maven.uotake.Menu.packs;
 
 import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
+import net.zypr.maven.uotake.EquipmentData.SkillData.Skill;
+import net.zypr.maven.uotake.EquipmentData.SkillData.SkillEffect;
+import net.zypr.maven.uotake.EquipmentData.SkillData.SkillSet;
 import net.zypr.maven.uotake.PlayerData.PlayerData;
 import net.zypr.maven.uotake.Uotake;
 import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
@@ -13,9 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 public class EquipEditor {
@@ -32,10 +33,42 @@ public class EquipEditor {
                 setupWeaponSet(inventory, playerData, itemCreator, slot, selectedSet);
             } else if (slot == 3) {
                 setupArmor(inventory, playerData, itemCreator, armorboolean, slot);
+            } else if (slot == 5) {
+                setupSkill(inventory, playerData, itemCreator, slot);
             }
         }
         return inventory;
     }
+
+    private static void setupSkill(Inventory inventory, PlayerData playerData, ItemCreator itemCreator, int slot) {
+        inventory.setItem(slot, itemCreator.setMaterial(Material.BOOK).setName("§fスキル").generate());
+        inventory.setItem(slot + 9, itemCreator.setMaterial(Material.LIME_DYE)
+                .setName("§aスキル-ON")
+                .setAction("setting@skillbool_false/OpenMenu@equip_editor").generate());
+
+        setupSkillSet(inventory, playerData, itemCreator, SkillSet.A, slot + 18);
+        setupSkillSet(inventory, playerData, itemCreator, SkillSet.B, slot + 27);
+        setupSkillSet(inventory, playerData, itemCreator, SkillSet.C, slot + 36);
+    }
+
+    private static void setupSkillSet(Inventory inventory, PlayerData playerData, ItemCreator itemCreator, SkillSet skillSet, int slot) {
+        Skill skill = playerData.getSkillsets().get(skillSet);
+        Map<SkillEffect, Float> effects = skill.getEffects();
+        List<String> lore = new ArrayList<>();
+
+        for (Map.Entry<SkillEffect, Float> effect : effects.entrySet()) {
+            lore.add("§7" + effect.getKey().getName() + ": §f" + effect.getValue());
+        }
+
+
+        inventory.setItem(slot, itemCreator.setMaterial(Material.NETHER_STAR)
+                .setName("§7" + skillSet.getName() + ": §f" + skill.getName())
+                .setAction("OpenMenu@equip_skill_" + skillSet.name() + "_" + skill.getId())
+                .setLore(lore)
+                .generate());
+        itemCreator.reset();
+    }
+
 
     private static void setupWeaponSet(Inventory inventory, PlayerData playerData, ItemCreator itemCreator, int slot, String selectedSet) {
         String setIdentifier = (slot == 0) ? "a" : "b";
