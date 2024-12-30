@@ -26,6 +26,20 @@ public class Menu {
         case SHOP_SR:
             p.openInventory(Shop.get(type, p));
             break;
+        case EQUIP_A_MAIN:
+        case EQUIP_B_FOOD:
+        case EQUIP_A_FOOD:
+        case EQUIP_A_GRENADE:
+        case EQUIP_A_SUB:
+        case EQUIP_B_GRENADE:
+        case EQUIP_B_MAIN:
+        case EQUIP_B_SUB:
+        case EQUIP_ARMOR_BODY:
+        case EQUIP_ARMOR_FOOT:
+        case EQUIP_ARMOR_HEAD:
+        case EQUIP_ARMOR_LEGS:
+            p.openInventory(Equip.get(type.getName(), p));
+            break;
         default:
             p.sendMessage(ChatColor.RED + "メニュー情報が存在しません．管理者に問い合わせてください");
             break;

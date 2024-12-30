@@ -1,5 +1,7 @@
 package net.zypr.maven.uotake.classes;
 
+import net.zypr.maven.uotake.EquipmentData.ArmorData.Armor;
+import net.zypr.maven.uotake.EquipmentData.ArmorData.ArmorType;
 import net.zypr.maven.uotake.Menu.Menu;
 import net.zypr.maven.uotake.Menu.MenuName;
 import net.zypr.maven.uotake.Others.Proxy;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
+import static net.zypr.maven.uotake.Uotake.armorLoader;
 import static net.zypr.maven.uotake.Uotake.weaponLoader;
 
 
@@ -124,7 +127,7 @@ public class ItemAction {
     }
 
     private static void handleSettingAction(Player p, PlayerData playerData, String settingParams) {
-        String[] params = settingParams.split("\\.");
+        String[] params = settingParams.split("_");
         switch (params[0]) {
             case "equip":
                 handleEquipSetting(p, playerData, params);
@@ -146,9 +149,6 @@ public class ItemAction {
     private static void handleEquipSetting(Player p, PlayerData playerData, String[] params) {
         if (params.length == 2) {
             playerData.setSelect(params[1]);
-        } else if (params.length == 3) {
-            p.sendMessage(params);
-            //Menu.open(p, "equip." + params[1] + "." + params[2]);
         }
     }
 
@@ -158,9 +158,9 @@ public class ItemAction {
             return;
         }
         String selector = params[1];
-        WeaponCategory category = WeaponCategory.valueOf(params[2].toUpperCase());
         String item = params[3];
         if (Objects.equals(selector, "a") || Objects.equals(selector, "b")) {
+            WeaponCategory category = WeaponCategory.valueOf(params[2].toUpperCase());
             Weapon weapon = weaponLoader.getWeaponByName(item);
             if (weapon != null) {
                 playerData.getEquipment().get(selector).put(category, weapon);
@@ -168,9 +168,10 @@ public class ItemAction {
                 p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
             }
         } else if (Objects.equals(selector, "armor")) {
-            Weapon weapon = weaponLoader.getWeaponByName(item);
-            if (weapon != null) {
-                playerData.getEquipment().get("armor").put(category, weapon);
+            ArmorType armorType = ArmorType.valueOf(params[2].toUpperCase());
+            Armor armor = armorLoader.getArmorByName(item);
+            if (armor != null) {
+                playerData.getArmor().put(armorType, armor);
                 Menu.open(p, MenuName.EQUIP_EDITOR);
                 p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
             }

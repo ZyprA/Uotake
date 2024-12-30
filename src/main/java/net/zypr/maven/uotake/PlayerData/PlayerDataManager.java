@@ -126,14 +126,20 @@ public class PlayerDataManager {
         playerFile.set("user.rank", data.getRank());
         playerFile.set("user.money", data.getMoney());
         playerFile.set("weapons.main", data.getMainWeapons().stream().map(Weapon::getId).collect(Collectors.toList()));
-        playerFile.set("weapons.sub", data.getMainWeapons().stream().map(Weapon::getId).collect(Collectors.toList()));
-        playerFile.set("weapons.grenade", data.getMainWeapons().stream().map(Weapon::getId).collect(Collectors.toList()));
-        playerFile.set("weapons.food", data.getMainWeapons().stream().map(Weapon::getId).collect(Collectors.toList()));
+        playerFile.set("weapons.sub", data.getSubWeapons().stream().map(Weapon::getId).collect(Collectors.toList()));
+        playerFile.set("weapons.grenade", data.getGrenades().stream().map(Weapon::getId).collect(Collectors.toList()));
+        playerFile.set("weapons.food", data.getFoods().stream().map(Weapon::getId).collect(Collectors.toList()));
 
         playerFile.set("equipment.select", data.getSelect());
         for (String key : data.getEquipment().keySet()) {
-            Map<WeaponCategory, Weapon> equipment = data.getEquipment().get(key);
-            playerFile.createSection("equipment." + key, equipment.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getId())));
+    Map<WeaponCategory, Weapon> equipment = data.getEquipment().get(key);
+    playerFile.createSection("equipment.weapon." + key, equipment.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().getName(), entry -> entry.getValue().getId())));
+}
+
+        playerFile.set("equipment.armor_boolean", data.getArmorBoolean());
+        for (ArmorType armorType : data.getArmor().keySet()) {
+            Armor armor = data.getArmor().get(armorType);
+            playerFile.set("equipment.armor." + armorType.getName(), armor.getId());
         }
 
         BattleStatus battleStatus = data.getBattleStatus();

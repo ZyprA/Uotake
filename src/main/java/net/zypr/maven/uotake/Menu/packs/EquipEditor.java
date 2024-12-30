@@ -43,7 +43,7 @@ public class EquipEditor {
         inventory.setItem(slot, itemCreator.setMaterial(Material.BOOK).setName("§f装備セット" + setName).generate());
         inventory.setItem(slot + 9, itemCreator.setMaterial(Objects.equals(selectedSet, setIdentifier) ? Material.LIME_DYE : Material.GRAY_DYE)
                 .setName(Objects.equals(selectedSet, setIdentifier) ? "§a武器セット" + setName + "-ON" : "§b武器セット" + setName + "§f-§cOFF")
-                .setAction("setting@equip." + setIdentifier + "/OpenMenu@equipeditor").generate());
+                .setAction("setting@equip_" + setIdentifier + "/OpenMenu@equip_editor").generate());
 
         setupWeapon(inventory, playerData, itemCreator, setIdentifier, WeaponCategory.MAIN, slot + 18);
         setupWeapon(inventory, playerData, itemCreator, setIdentifier, WeaponCategory.SUB, slot + 27);
@@ -56,7 +56,7 @@ public class EquipEditor {
         inventory.setItem(slot, itemCreator.setMaterial(weapon.getMaterial())
                 .setCmd(weapon.getCmd())
                 .setName("§7" + getWeaponCategoryName(category) + ": §f" + weapon.getId())
-                .setAction("setting@equip." + setIdentifier + "." + category.getName() + "/Sound@entity.bat.takeoff,1,1")
+                .setAction("OpenMenu@equip_" + setIdentifier + "_" + category.getName() + "/Sound@entity.bat.takeoff,1,1")
                 .setLore(weapon.getDescription())
                 .setAmount(weapon.getAmount())
                 .generate());
@@ -77,7 +77,7 @@ public class EquipEditor {
         inventory.setItem(slot, itemCreator.setMaterial(Material.BOOK).setName("§f防具").generate());
         inventory.setItem(slot + 9, itemCreator.setMaterial(armorboolean ? Material.LIME_DYE : Material.GRAY_DYE)
                 .setName(armorboolean ? "§a防具-ON" : "§b防具§f-§cOFF")
-                .setAction(armorboolean ? "setting@armbool.false/OpenMenu@equipeditor" : "setting@armbool.true/OpenMenu@equipeditor").generate());
+                .setAction(armorboolean ? "setting@armbool_false/OpenMenu@equip_editor" : "setting@armbool_true/OpenMenu@equip_editor").generate());
 
         setupArmorPiece(inventory, playerData, itemCreator, ArmorType.HEAD, slot + 18);
         setupArmorPiece(inventory, playerData, itemCreator, ArmorType.BODY, slot + 27);
@@ -90,24 +90,19 @@ public class EquipEditor {
         inventory.setItem(slot, itemCreator.setMaterial(armor.getMaterial())
                 .setCmd(armor.getCmd())
                 .setName("§7" + getArmorTypeName(armorType) + ": §f" + armor.getId())
-                .setAction("setting@equip.armor." + armorType.name() + "/Sound@entity.bat.takeoff,1,1")
+                .setAction("OpenMenu@equip_armor_" + armorType.name() + "/Sound@entity.bat.takeoff,1,1")
                 .setLore(armor.getDescription())
                 .generate());
         itemCreator.reset();
     }
 
     private static String getArmorTypeName(ArmorType armorType) {
-        switch (armorType) {
-            case HEAD:
-                return "頭部防具";
-            case BODY:
-                return "上半身防具";
-            case LEGS:
-                return "下半身防具";
-            case FOOT:
-                return "脚防具";
-            default:
-                return "";
-        }
+        return switch (armorType) {
+            case HEAD -> "頭部防具";
+            case BODY -> "上半身防具";
+            case LEGS -> "下半身防具";
+            case FOOT -> "脚防具";
+            default -> "";
+        };
     }
 }
