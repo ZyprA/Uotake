@@ -1,6 +1,5 @@
 package net.zypr.maven.uotake.EquipmentData.SkillData;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -8,14 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SkillLoader {
-    private final FileConfiguration config;
     private final Map<String, Skill> skillMap = new HashMap<>();
 
-    public SkillLoader(FileConfiguration config) {
-        this.config = config;
-    }
+    public void loadSkills(FileConfiguration config) {
 
-    public void loadSkills() {
+        skillMap.clear();
         ConfigurationSection skillSection = config.getConfigurationSection("skills");
 
         if (skillSection == null) {

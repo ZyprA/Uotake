@@ -10,14 +10,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class WeaponLoader {
-    private final FileConfiguration config;
     private final Map<String, Weapon> weaponMap = new HashMap<>();
 
-    public WeaponLoader(FileConfiguration config) {
-        this.config = config;
-    }
 
-    public void loadWeapons() {
+    public void loadWeapons(FileConfiguration config) {
+
+        weaponMap.clear();
         // "weapon" セクションを取得
         ConfigurationSection weaponSection = config.getConfigurationSection("weapon");
         if (weaponSection == null) {

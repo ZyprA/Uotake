@@ -8,14 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ArmorLoader {
-    private final FileConfiguration config;
+
     private final Map<String, Armor> armorMap = new HashMap<>();
+    public void loadArmors(FileConfiguration config) {
 
-    public ArmorLoader(FileConfiguration config) {
-        this.config = config;
-    }
-
-    public void loadArmors() {
+        armorMap.clear();
         ConfigurationSection armorSection = config.getConfigurationSection("armor");
         if (armorSection == null) {
             return;

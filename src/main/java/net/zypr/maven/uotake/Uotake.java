@@ -56,14 +56,14 @@ public class Uotake extends JavaPlugin {
         inventory = YamlConfiguration.loadConfiguration(new File(getRoot() + "/setting/lobby/inventory.yml"));
         variable = new ConfigUtil("/setting/lobby/variable.yml");
         playerDataManager = new PlayerDataManager();
-        weaponLoader = new WeaponLoader(config);
-        weaponLoader.loadWeapons();
+        weaponLoader = new WeaponLoader();
+        weaponLoader.loadWeapons(config);
 
-        armorLoader = new ArmorLoader(config);
-        armorLoader.loadArmors();
+        armorLoader = new ArmorLoader();
+        armorLoader.loadArmors(config);
 
-        skillLoader = new SkillLoader(config);
-        skillLoader.loadSkills();
+        skillLoader = new SkillLoader();
+        skillLoader.loadSkills(config);
 
         new Scoreboard().showScoreboard();
     }
