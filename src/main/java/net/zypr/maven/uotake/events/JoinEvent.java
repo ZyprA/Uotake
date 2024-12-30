@@ -15,6 +15,7 @@ import java.util.Iterator;
 public class JoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage("§ejoin §7> §b" + event.getPlayer().getName());
         Player player = event.getPlayer();
         Lobby.teleportLobby(player);
         Uotake.playerDataManager.loadPlayerData(player);
@@ -30,6 +31,7 @@ public class JoinEvent implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
         Player player = event.getPlayer();
         Uotake.playerDataManager.savePlayerData(player);
         Uotake.playerDataManager.removePlayerData(player.getUniqueId());
