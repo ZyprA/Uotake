@@ -28,6 +28,11 @@ public class CommandRegister {
                     Uotake.menu = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/lobby/menu.yml"));
                     Uotake.inventory = YamlConfiguration.loadConfiguration(new File(Uotake.getRoot() + "/setting/lobby/inventory.yml"));
                     sender.sendMessage(ChatColor.GREEN + "読み込ました");
+
+                    Uotake.armorLoader.loadArmors(Uotake.config);
+                    Uotake.weaponLoader.loadWeapons(Uotake.config);
+                    Uotake.skillLoader.loadSkills(Uotake.config);
+
                 })
                 .register();
     }
