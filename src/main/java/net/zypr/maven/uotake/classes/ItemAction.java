@@ -77,27 +77,11 @@ public class ItemAction {
 
     private static void handleBuyWeaponAction(Player p, Weapon weapon) {
        Weapon.Result buy = weapon.buy(p);
-        switch (buy) {
-            case SUCCESS:
-                p.sendMessage("§a購入成功。");
-                p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
-                break;
-            case NOT_ENOUGH_MONEY:
-                p.sendMessage("§c所持金が不足しているため購入できません。");
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
-                break;
-            case ALREADY_HAVE:
-                p.sendMessage("§cすでに所持しているため購入できません。");
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
-                break;
-            case NOT_ENOUGH_TIER:
-                p.sendMessage("§c前のTierの武器を開放してください。");
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
-                break;
-            default:
-                p.sendMessage("§c予期しないエラーが発生しました。管理者に問い合わせてください。");
-                p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
-                break;
+        p.sendMessage(buy.getMessage());
+        if (Objects.requireNonNull(buy) == Weapon.Result.SUCCESS) {
+            p.playSound(p, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f);
+        } else {
+            p.playSound(p, Sound.BLOCK_NOTE_BLOCK_HAT, 1f, 1f);
         }
     }
 
