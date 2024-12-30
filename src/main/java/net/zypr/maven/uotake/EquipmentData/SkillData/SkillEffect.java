@@ -3,9 +3,9 @@ package net.zypr.maven.uotake.EquipmentData.SkillData;
 public enum SkillEffect {
     SPEED("俊足"),
     DURABILITY("耐力"),
-    JUMP("飛躍"),
     HEALTH("体力"),
-    AMMO("弾薬");
+    MAIN_AMMO("メイン弾薬"),
+    SUB_AMMO("サブ弾薬");
 
     private final String name;
 
